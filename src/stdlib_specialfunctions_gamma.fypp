@@ -510,7 +510,7 @@ contains
 
             sum = log(pi) - log(sin(pi * z)) - sum
             m = ceiling((2 * z % re - 3) / 4)
-            sum % im = sum % im + 2 * pi * m * sign(1.0_${k1}$, z % im)
+!            sum % im = sum % im + 2 * pi * m * sign(1.0_${k1}$, z % im)
 
         end if
 
