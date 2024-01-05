@@ -9,5 +9,5 @@ program example_logspace_int
 
   real(dp) :: r(n) ! Integer values raised to real powers results in real values
 
-  r = logspace(start, end, n)
+  ! r = logspace(start, end, n)
 end program example_logspace_int

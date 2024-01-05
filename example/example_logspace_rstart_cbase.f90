@@ -10,6 +10,6 @@ program example_logspace_rstart_cbase
 
   complex(dp) :: z(n) ! complex values raised to real powers result in complex values
 
-  z = logspace(start, end, n, base)
+  ! z = logspace(start, end, n, base)
 
 end program example_logspace_rstart_cbase

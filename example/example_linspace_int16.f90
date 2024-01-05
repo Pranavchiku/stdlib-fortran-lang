@@ -8,5 +8,5 @@ program example_linspace_int16
 
   real(dp) :: r(15)
 
-  r = linspace(start, end, 15)
+  ! r = linspace(start, end, 15)
 end program example_linspace_int16

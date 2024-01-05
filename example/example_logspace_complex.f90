@@ -8,5 +8,5 @@ program example_logspace_complex
 
   complex(dp) :: z(11) ! Complex values raised to complex powers results in complex values
 
-  z = logspace(start, end, 11)
+  ! z = logspace(start, end, 11)
 end program example_logspace_complex

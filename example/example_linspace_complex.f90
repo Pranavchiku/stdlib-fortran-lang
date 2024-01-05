@@ -8,5 +8,5 @@ program example_linspace_complex
 
   complex(dp) :: z(11)
 
-  z = linspace(start, end, 11)
+  ! z = linspace(start, end, 11)
 end program example_linspace_complex
