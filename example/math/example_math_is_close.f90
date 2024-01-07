@@ -6,7 +6,7 @@ program example_math_is_close
   y = -3
   NAN = sqrt(y)
 
-  print *, is_close(x, [real :: 1, 2.1])       ! [T, F]
+  print *, is_close(x, [real :: 1.0, 2.1])       ! [T, F]
   print *, is_close(2.0, 2.1, abs_tol=0.1)    ! T
   print *, NAN, is_close(2.0, NAN), is_close(2.0, NAN, equal_nan=.true.)   ! NAN, F, F
   print *, is_close(NAN, NAN), is_close(NAN, NAN, equal_nan=.true.)        ! F, T
