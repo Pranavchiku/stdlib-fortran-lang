@@ -49,15 +49,59 @@ module stdlib_math
     !! If the number of elements is not specified, create an array with size 100. If n is a negative value,
     !! return an array with size 0. If n = 1, return an array whose only element is end
     !!([Specification](../page/specs/stdlib_math.html#linspace-create-a-linearly-spaced-rank-one-array))
-      procedure :: linspace_default_1_rsp_rsp
-      procedure :: linspace_default_1_rdp_rdp
-      procedure :: linspace_default_1_csp_csp
-      procedure :: linspace_default_1_cdp_cdp
+      pure module function linspace_default_1_rsp_rsp(start, end) result(res)
+        real(sp), intent(in) :: start
+        real(sp), intent(in) :: end
 
-      procedure :: linspace_n_1_rsp_rsp
-      procedure :: linspace_n_1_rdp_rdp
-      procedure :: linspace_n_1_csp_csp
-      procedure :: linspace_n_1_cdp_cdp
+        real(sp) :: res(DEFAULT_LINSPACE_LENGTH)
+      end function linspace_default_1_rsp_rsp
+      pure module function linspace_default_1_rdp_rdp(start, end) result(res)
+        real(dp), intent(in) :: start
+        real(dp), intent(in) :: end
+
+        real(dp) :: res(DEFAULT_LINSPACE_LENGTH)
+      end function linspace_default_1_rdp_rdp
+      pure module function linspace_default_1_csp_csp(start, end) result(res)
+        complex(sp), intent(in) :: start
+        complex(sp), intent(in) :: end
+
+        complex(sp) :: res(DEFAULT_LINSPACE_LENGTH)
+      end function linspace_default_1_csp_csp
+      pure module function linspace_default_1_cdp_cdp(start, end) result(res)
+        complex(dp), intent(in) :: start
+        complex(dp), intent(in) :: end
+
+        complex(dp) :: res(DEFAULT_LINSPACE_LENGTH)
+      end function linspace_default_1_cdp_cdp
+
+      pure module function linspace_n_1_rsp_rsp(start, end, n) result(res)
+        real(sp), intent(in) :: start
+        real(sp), intent(in) :: end
+        integer, intent(in) :: n
+
+        real(sp) :: res(max(n, 0))
+      end function linspace_n_1_rsp_rsp
+      pure module function linspace_n_1_rdp_rdp(start, end, n) result(res)
+        real(dp), intent(in) :: start
+        real(dp), intent(in) :: end
+        integer, intent(in) :: n
+
+        real(dp) :: res(max(n, 0))
+      end function linspace_n_1_rdp_rdp
+      pure module function linspace_n_1_csp_csp(start, end, n) result(res)
+        complex(sp), intent(in) :: start
+        complex(sp), intent(in) :: end
+        integer, intent(in) :: n
+
+        complex(sp) :: res(max(n, 0))
+      end function linspace_n_1_csp_csp
+      pure module function linspace_n_1_cdp_cdp(start, end, n) result(res)
+        complex(dp), intent(in) :: start
+        complex(dp), intent(in) :: end
+        integer, intent(in) :: n
+
+        complex(dp) :: res(max(n, 0))
+      end function linspace_n_1_cdp_cdp
 
 
     ! Add support for integer linspace
@@ -918,138 +962,5 @@ contains
         result = [(i, i=start_, end_, step_)]
 
     end function arange_i_int64
-
-    pure module function linspace_default_1_rsp_rsp(start, end) result(res)
-      real(sp), intent(in) :: start
-      real(sp), intent(in) :: end
-
-      real(sp) :: res(DEFAULT_LINSPACE_LENGTH)
-
-      res = linspace(start, end, DEFAULT_LINSPACE_LENGTH)
-
-    end function linspace_default_1_rsp_rsp
-    pure module function linspace_default_1_rdp_rdp(start, end) result(res)
-      real(dp), intent(in) :: start
-      real(dp), intent(in) :: end
-
-      real(dp) :: res(DEFAULT_LINSPACE_LENGTH)
-
-      res = linspace(start, end, DEFAULT_LINSPACE_LENGTH)
-
-    end function linspace_default_1_rdp_rdp
-
-    pure module function linspace_n_1_rsp_rsp(start, end, n) result(res)
-      real(sp), intent(in) :: start
-      real(sp), intent(in) :: end
-      integer, intent(in) :: n
-
-      real(sp) :: res(max(n, 0))
-
-      integer :: i    ! Looping index
-      real(sp) :: interval ! Difference between adjacent elements
-
-
-      if(n <= 0) return ! If passed length is less than or equal to 0, return an empty (allocated with length 0) array
-      if(n == 1) then
-        res(1) = end
-        return
-      end if
-
-      interval = (end - start) / real((n - 1), sp)
-
-      res(1) = start
-      res(n) = end
-
-      do i = 2, n - 1
-
-        res(i) = real((i-1), sp) * interval + start
-
-      end do
-
-    end function linspace_n_1_rsp_rsp
-    pure module function linspace_n_1_rdp_rdp(start, end, n) result(res)
-      real(dp), intent(in) :: start
-      real(dp), intent(in) :: end
-      integer, intent(in) :: n
-
-      real(dp) :: res(max(n, 0))
-
-      integer :: i    ! Looping index
-      real(dp) :: interval ! Difference between adjacent elements
-
-
-      if(n <= 0) return ! If passed length is less than or equal to 0, return an empty (allocated with length 0) array
-      if(n == 1) then
-        res(1) = end
-        return
-      end if
-
-      interval = (end - start) / real((n - 1), dp)
-
-      res(1) = start
-      res(n) = end
-
-      do i = 2, n - 1
-
-        res(i) = real((i-1), dp) * interval + start
-
-      end do
-
-    end function linspace_n_1_rdp_rdp
-
-    pure module function linspace_default_1_csp_csp(start, end) result(res)
-      complex(sp), intent(in) :: start
-      complex(sp), intent(in) :: end
-
-      complex(sp) :: res(DEFAULT_LINSPACE_LENGTH)
-
-      res = linspace(start, end, DEFAULT_LINSPACE_LENGTH)
-
-    end function linspace_default_1_csp_csp
-    pure module function linspace_default_1_cdp_cdp(start, end) result(res)
-      complex(dp), intent(in) :: start
-      complex(dp), intent(in) :: end
-
-      complex(dp) :: res(DEFAULT_LINSPACE_LENGTH)
-
-      res = linspace(start, end, DEFAULT_LINSPACE_LENGTH)
-
-    end function linspace_default_1_cdp_cdp
-
-    pure module function linspace_n_1_csp_csp(start, end, n) result(res)
-      complex(sp), intent(in) :: start
-      complex(sp), intent(in) :: end
-      integer, intent(in) :: n
-
-      complex(sp) :: res(max(n, 0))
-
-
-      real(sp) :: x(max(n, 0)) ! array of the real part of complex number
-      real(sp) :: y(max(n, 0)) ! array of the imaginary part of the complex number
-
-      x = linspace(start%re, end%re, n)
-      y = linspace(start%im, end%im, n)
-
-      res = cmplx(x, y, kind=sp)
-
-    end function linspace_n_1_csp_csp
-    pure module function linspace_n_1_cdp_cdp(start, end, n) result(res)
-      complex(dp), intent(in) :: start
-      complex(dp), intent(in) :: end
-      integer, intent(in) :: n
-
-      complex(dp) :: res(max(n, 0))
-
-
-      real(dp) :: x(max(n, 0)) ! array of the real part of complex number
-      real(dp) :: y(max(n, 0)) ! array of the imaginary part of the complex number
-
-      x = linspace(start%re, end%re, n)
-      y = linspace(start%im, end%im, n)
-
-      res = cmplx(x, y, kind=dp)
-
-    end function linspace_n_1_cdp_cdp
-
     
 end module stdlib_math
