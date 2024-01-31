@@ -59,27 +59,24 @@ module stdlib_math
     !! If the number of elements is not specified, create an array with size 100. If n is a negative value,
     !! return an array with size 0. If n = 1, return an array whose only element is end
     !!([Specification](../page/specs/stdlib_math.html#linspace-create-a-linearly-spaced-rank-one-array))
-    #:for k1, t1 in RC_KINDS_TYPES
+    #:for k1, t1 in REAL_KINDS_TYPES
       #:set RName = rname("linspace_default", 1, t1, k1)
-      pure module function ${RName}$(start, end) result(res)
-        ${t1}$, intent(in) :: start
-        ${t1}$, intent(in) :: end
-
-        ${t1}$ :: res(DEFAULT_LINSPACE_LENGTH)
-      end function ${RName}$
+      procedure :: ${RName}$
+    #:endfor
+    #:for k1, t1 in CMPLX_KINDS_TYPES
+      #:set RName = rname("linspace_default", 1, t1, k1)
+      procedure :: ${RName}$
     #:endfor
 
-    #:for k1, t1 in RC_KINDS_TYPES
+    #:for k1, t1 in REAL_KINDS_TYPES
       #:set RName = rname("linspace_n", 1, t1, k1)
-      pure module function ${RName}$(start, end, n) result(res)
-        ${t1}$, intent(in) :: start
-        ${t1}$, intent(in) :: end
-        integer, intent(in) :: n
-
-        ${t1}$ :: res(max(n, 0))
-      end function ${RName}$
+      procedure :: ${RName}$
     #:endfor
 
+    #:for k1, t1 in CMPLX_KINDS_TYPES
+      #:set RName = rname("linspace_n", 1, t1, k1)
+      procedure :: ${RName}$
+    #:endfor
 
     ! Add support for integer linspace
     !!
@@ -88,23 +85,12 @@ module stdlib_math
       #:set RName = rname("linspace_default", 1, t1, k1)
       #! The interface for INT_KINDS_TYPES cannot be combined with RC_KINDS_TYPES
       #! because the output for integer types is always a real with dp.
-      pure module function ${RName}$(start, end) result(res)
-        ${t1}$, intent(in) :: start
-        ${t1}$, intent(in) :: end
-
-        real(dp) :: res(DEFAULT_LINSPACE_LENGTH)
-      end function ${RName}$
+      procedure :: ${RName}$
     #:endfor
 
     #:for k1, t1 in INT_KINDS_TYPES
       #:set RName = rname("linspace_n", 1, t1, k1)
-      pure module function ${RName}$(start, end, n) result(res)
-        ${t1}$, intent(in) :: start
-        ${t1}$, intent(in) :: end
-        integer, intent(in) :: n
-
-        real(dp) :: res(max(n, 0))
-      end function ${RName}$
+      procedure :: ${RName}$
     #:endfor
 
   end interface
@@ -530,5 +516,114 @@ contains
     end function all_close_${r1}$_${t1[0]}$${k1}$
     #:endfor
     #:endfor
+
+ #:for k1, t1 in REAL_KINDS_TYPES
+    #:set RName = rname("linspace_default", 1, t1, k1)
+    pure module function ${RName}$(start, end) result(res)
+      ${t1}$, intent(in) :: start
+      ${t1}$, intent(in) :: end
+
+      ${t1}$ :: res(DEFAULT_LINSPACE_LENGTH)
+
+      res = linspace(start, end, DEFAULT_LINSPACE_LENGTH)
+
+    end function ${RName}$
+  #:endfor
+
+  #:for k1, t1 in REAL_KINDS_TYPES
+    #:set RName = rname("linspace_n", 1, t1, k1)
+    pure module function ${RName}$(start, end_, n) result(res)
+      ${t1}$, intent(in) :: start
+      ${t1}$, intent(in) :: end_
+      integer, intent(in) :: n
+
+      ${t1}$ :: res(max(n, 0))
+
+      integer :: i    ! Looping index
+      ${t1}$ :: interval ! Difference between adjacent elements
+
+
+      if(n <= 0) return ! If passed length is less than or equal to 0, return an empty (allocated with length 0) array
+      if(n == 1) then
+        res(1) = end_
+        return
+      end if
+
+      interval = (end_ - start) / real((n - 1), ${k1}$)
+
+      res(1) = start
+      res(n) = end_
+
+      do i = 2, n - 1
+
+        res(i) = real((i-1), ${k1}$) * interval + start
+
+      end do
+
+    end function ${RName}$
+  #:endfor
+
+    #:for k1, t1 in CMPLX_KINDS_TYPES
+      #:set RName = rname("linspace_n", 1, t1, k1)
+      pure module function ${RName}$(start, end, n) result(res)
+        ${t1}$, intent(in) :: start
+        ${t1}$, intent(in) :: end
+        integer, intent(in) :: n
+
+        ${t1}$ :: res(max(n, 0))
+
+        real(${k1}$) :: x(max(n, 0)) ! array of the real part of complex number
+        real(${k1}$) :: y(max(n, 0)) ! array of the imaginary part of the complex number
+
+        x = linspace(start%re, end%re, n)
+        y = linspace(start%im, end%im, n)
+
+        res = cmplx(x, y, kind=${k1}$)
+      end function ${RName}$
+    #:endfor
+
+    ! Add support for integer linspace
+    !!
+    !! When dealing with integers as the `start` and `end` parameters, the return type is always a `real(dp)`.
+    #:for k1, t1 in INT_KINDS_TYPES
+      #:set RName = rname("linspace_default", 1, t1, k1)
+      #! The interface for INT_KINDS_TYPES cannot be combined with RC_KINDS_TYPES
+      #! because the output for integer types is always a real with dp.
+      pure module function ${RName}$(start, end) result(res)
+        ${t1}$, intent(in) :: start
+        ${t1}$, intent(in) :: end
+
+        real(dp) :: res(DEFAULT_LINSPACE_LENGTH)
+
+        res = linspace(real(start, kind=dp), real(end, kind=dp), DEFAULT_LINSPACE_LENGTH)
+      end function ${RName}$
+    #:endfor
+
+    #:for k1, t1 in INT_KINDS_TYPES
+      #:set RName = rname("linspace_n", 1, t1, k1)
+      pure module function ${RName}$(start, end, n) result(res)
+        ${t1}$, intent(in) :: start
+        ${t1}$, intent(in) :: end
+        integer, intent(in) :: n
+
+        real(dp) :: res(max(n, 0))
+
+        res = linspace(real(start, kind=dp), real(end, kind=dp), n)
+
+      end function ${RName}$
+    #:endfor
+
+    #:for k1, t1 in CMPLX_KINDS_TYPES
+      #:set RName = rname("linspace_default", 1, t1, k1)
+      pure module function ${RName}$(start, end) result(res)
+        ${t1}$, intent(in) :: start
+        ${t1}$, intent(in) :: end
+
+        ${t1}$ :: res(DEFAULT_LINSPACE_LENGTH)
+
+        res = linspace(start, end, DEFAULT_LINSPACE_LENGTH)
+      end function ${RName}$
+    #:endfor
+
     
 end module stdlib_math
