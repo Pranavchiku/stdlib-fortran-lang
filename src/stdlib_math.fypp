@@ -109,48 +109,22 @@ module stdlib_math
   #!=========================================================
   #:for k1, t1 in RC_KINDS_TYPES
     #:set RName = rname("logspace", 1, t1, k1, "default")
-    pure module function ${RName}$(start, end) result(res)
-
-      ${t1}$, intent(in) :: start
-      ${t1}$, intent(in) :: end
-
-      ${t1}$ :: res(DEFAULT_LOGSPACE_LENGTH)
-
-    end function ${RName}$
+    procedure :: ${RName}$
   #:endfor
   #! Integer support
   #:set RName = rname("logspace", 1, "integer(int32)", "int32", "default")
-    pure module function ${RName}$(start, end) result(res)
-
-      integer, intent(in) :: start
-      integer, intent(in) :: end
-
-      real(dp) :: res(DEFAULT_LOGSPACE_LENGTH)
-
-  end function ${RName}$
+    procedure :: ${RName}$
 
   #!=========================================================
   #!=     logspace(start, end, n)                           =
   #!=========================================================
   #:for k1, t1 in RC_KINDS_TYPES
     #:set RName = rname("logspace", 1, t1, k1, "n")
-    pure module function ${RName}$(start, end, n) result(res)
-      ${t1}$, intent(in) :: start
-      ${t1}$, intent(in) :: end
-      integer, intent(in) :: n
-
-      ${t1}$ :: res(max(n, 0))
-    end function ${RName}$
+    procedure :: ${RName}$
   #:endfor
   #! Integer support
   #:set RName = rname("logspace", 1, "integer(int32)", "int32", "n")
-    pure module function ${RName}$(start, end, n) result(res)
-      integer, intent(in) :: start
-      integer, intent(in) :: end
-      integer, intent(in) :: n
-
-      real(dp) :: res(n)
-    end function ${RName}$
+    procedure :: ${RName}$
 
   #!=========================================================
   #!=     logspace(start, end, n, base)                     =
@@ -165,34 +139,13 @@ module stdlib_math
     ! Different combinations of parameter types will lead to different result types.
     ! Those combinations are indicated in the body of each function.
     #:set RName = rname("logspace", 1, t1, k1, "n_rbase")
-    pure module function ${RName}$(start, end, n, base) result(res)
-      ${t1}$, intent(in) :: start
-      ${t1}$, intent(in) :: end
-      integer, intent(in) :: n
-      ${t1}$, intent(in) :: base
-      ! real(${k1}$) endpoints + real(${k1}$) base = real(${k1}$) result
-      ${t1}$ :: res(max(n, 0))
-    end function ${RName}$
+    procedure :: ${RName}$
 
     #:set RName = rname("logspace", 1, t1, k1, "n_cbase")
-    pure module function ${RName}$(start, end, n, base) result(res)
-      ${t1}$, intent(in) :: start
-      ${t1}$, intent(in) :: end
-      integer, intent(in) :: n
-      complex(${k1}$), intent(in) :: base
-      ! real(${k1}$) endpoints + complex(${k1}$) base = complex(${k1}$) result
-      ${t1}$ :: res(max(n, 0))
-    end function ${RName}$
+    procedure :: ${RName}$
 
     #:set RName = rname("logspace", 1, t1, k1, "n_ibase")
-    pure module function ${RName}$(start, end, n, base) result(res)
-      ${t1}$, intent(in) :: start
-      ${t1}$, intent(in) :: end
-      integer, intent(in) :: n
-      integer, intent(in) :: base
-      ! real(${k1}$) endpoints + integer base = real(${k1}$) result
-      ${t1}$ :: res(max(n, 0))
-    end function ${RName}$
+    procedure :: ${RName}$
   #:endfor
   #! ========================================================
   #! ========================================================
@@ -202,34 +155,13 @@ module stdlib_math
     ! Different combinations of parameter types will lead to different result types.
     ! Those combinations are indicated in the body of each function.
     #:set RName = rname("logspace", 1, t1, k1, "n_rbase")
-    pure module function ${RName}$(start, end, n, base) result(res)
-      ${t1}$, intent(in) :: start
-      ${t1}$, intent(in) :: end
-      integer, intent(in) :: n
-      real(${k1}$), intent(in) :: base
-      ! complex(${k1}$) endpoints + real(${k1}$) base = complex(${k1}$) result
-      ${t1}$ :: res(max(n, 0))
-    end function ${RName}$
+    procedure :: ${RName}$
 
     #:set RName = rname("logspace", 1, t1, k1, "n_cbase")
-    pure module function ${RName}$(start, end, n, base) result(res)
-      ${t1}$, intent(in) :: start
-      ${t1}$, intent(in) :: end
-      integer, intent(in) :: n
-      complex(${k1}$), intent(in) :: base
-      ! complex(${k1}$) endpoints + complex(${k1}$) base = complex(${k1}$) result
-      ${t1}$ :: res(max(n, 0))
-    end function ${RName}$
+    procedure :: ${RName}$
 
     #:set RName = rname("logspace", 1, t1, k1, "n_ibase")
-    pure module function ${RName}$(start, end, n, base) result(res)
-      ${t1}$, intent(in) :: start
-      ${t1}$, intent(in) :: end
-      integer, intent(in) :: n
-      integer, intent(in) :: base
-      ! complex(${k1}$) endpoints + integer base = complex(${k1}$) result
-      ${t1}$ :: res(max(n, 0))
-    end function ${RName}$
+    procedure :: ${RName}$
   #:endfor
   #! ========================================================
   #! ========================================================
@@ -240,35 +172,14 @@ module stdlib_math
     ! Those combinations are indicated in the body of each function.
   #:for k1 in REAL_KINDS
     #:set RName = rname("logspace", 1, "integer(int32)", "int32", "n_r" + str(k1) + "base")
-    pure module function ${RName}$(start, end, n, base) result(res)
-      integer, intent(in) :: start
-      integer, intent(in) :: end
-      integer, intent(in) :: n
-      real(${k1}$), intent(in) :: base
-      ! integer endpoints + real(${k1}$) base = real(${k1}$) result
-      real(${k1}$) :: res(max(n, 0))
-    end function ${RName}$
+    procedure :: ${RName}$
 
     #:set RName = rname("logspace", 1, "integer(int32)", "int32", "n_c" + str(k1) + "base")
-    pure module function ${RName}$(start, end, n, base) result(res)
-      integer, intent(in) :: start
-      integer, intent(in) :: end
-      integer, intent(in) :: n
-      complex(${k1}$), intent(in) :: base
-      ! integer endpoints + complex(${k1}$) base = complex(${k1}$) result
-      complex(${k1}$) :: res(max(n, 0))
-    end function ${RName}$
+    procedure :: ${RName}$
   #:endfor
 
     #:set RName = rname("logspace", 1, "integer(int32)", "int32", "n_ibase")
-    pure module function ${RName}$(start, end, n, base) result(res)
-      integer, intent(in) :: start
-      integer, intent(in) :: end
-      integer, intent(in) :: n
-      integer, intent(in) :: base
-      ! integer endpoints + integer base = integer result
-      integer :: res(max(n, 0))
-    end function ${RName}$
+    procedure :: ${RName}$
 
 
   end interface
@@ -625,5 +536,204 @@ contains
       end function ${RName}$
     #:endfor
 
-    
+  #:for k1, t1 in RC_KINDS_TYPES
+    #:set RName = rname("logspace", 1, t1, k1, "default")
+    pure module function ${RName}$(start, end) result(res)
+
+      ${t1}$, intent(in) :: start
+      ${t1}$, intent(in) :: end
+
+      ${t1}$ :: res(DEFAULT_LOGSPACE_LENGTH)
+
+      res = logspace(start, end, DEFAULT_LOGSPACE_LENGTH, real(DEFAULT_LOGSPACE_BASE, ${k1}$))
+
+    end function ${RName}$
+  #:endfor
+
+  #:set RName = rname("logspace", 1, "integer(int32)", "int32", "default")
+    pure module function ${RName}$(start, end) result(res)
+
+      integer, intent(in) :: start
+      integer, intent(in) :: end
+
+      real(dp) :: res(DEFAULT_LOGSPACE_LENGTH)
+
+      res = logspace(start, end, DEFAULT_LOGSPACE_LENGTH, DEFAULT_LOGSPACE_BASE)
+
+  end function ${RName}$
+
+  #!=========================================================
+  #!=     logspace(start, end, n)                           =
+  #!=========================================================
+  #:for k1, t1 in RC_KINDS_TYPES
+    #:set RName = rname("logspace", 1, t1, k1, "n")
+    pure module function ${RName}$(start, end, n) result(res)
+      ${t1}$, intent(in) :: start
+      ${t1}$, intent(in) :: end
+      integer, intent(in) :: n
+
+      ${t1}$ :: res(max(n, 0))
+
+      res = logspace(start, end, n, real(DEFAULT_LOGSPACE_BASE, ${k1}$))
+    end function ${RName}$
+  #:endfor
+
+  #! Integer support
+  #:set RName = rname("logspace", 1, "integer(int32)", "int32", "n")
+    pure module function ${RName}$(start, end, n) result(res)
+      integer, intent(in) :: start
+      integer, intent(in) :: end
+      integer, intent(in) :: n
+
+      real(dp) :: res(n)
+
+      res = logspace(start, end, n, DEFAULT_LOGSPACE_BASE)
+    end function ${RName}$
+
+  #!=========================================================
+  #!=     logspace(start, end, n, base)                     =
+  #!=========================================================
+  #! Need another function where base is not optional,
+  #! otherwise the compiler can not differentiate between
+  #! generic calls to logspace_n where a base is not present
+  #! ========================================================
+  #:for k1, t1 in REAL_KINDS_TYPES
+    ! Generate logarithmically spaced sequence from ${k1}$ base to the powers
+    ! of ${k1}$ start and end. [base^start, ... , base^end]
+    ! Different combinations of parameter types will lead to different result types.
+    ! Those combinations are indicated in the body of each function.
+    #:set RName = rname("logspace", 1, t1, k1, "n_rbase")
+    pure module function ${RName}$(start, end, n, base) result(res)
+      ${t1}$, intent(in) :: start
+      ${t1}$, intent(in) :: end
+      integer, intent(in) :: n
+      ${t1}$, intent(in) :: base
+      ! real(${k1}$) endpoints + real(${k1}$) base = real(${k1}$) result
+      ${t1}$ :: res(max(n, 0))
+
+      ${t1}$ :: exponents(max(n, 0))
+      exponents = linspace(start, end, n)
+      res = base ** exponents
+    end function ${RName}$
+
+    #:set RName = rname("logspace", 1, t1, k1, "n_cbase")
+    pure module function ${RName}$(start, end, n, base) result(res)
+      ${t1}$, intent(in) :: start
+      ${t1}$, intent(in) :: end
+      integer, intent(in) :: n
+      complex(${k1}$), intent(in) :: base
+      ! real(${k1}$) endpoints + complex(${k1}$) base = complex(${k1}$) result
+      ${t1}$ :: res(max(n, 0))
+
+      ${t1}$ :: exponents(max(n, 0))
+      exponents = linspace(start, end, n)
+      res = base ** exponents
+    end function ${RName}$
+
+    #:set RName = rname("logspace", 1, t1, k1, "n_ibase")
+    pure module function ${RName}$(start, end, n, base) result(res)
+      ${t1}$, intent(in) :: start
+      ${t1}$, intent(in) :: end
+      integer, intent(in) :: n
+      integer, intent(in) :: base
+      ! real(${k1}$) endpoints + integer base = real(${k1}$) result
+      ${t1}$ :: res(max(n, 0))
+
+      ${t1}$ :: exponents(max(n, 0))
+      exponents = linspace(start, end, n)
+      res = base ** exponents
+    end function ${RName}$
+  #:endfor
+
+  #:for k1, t1 in CMPLX_KINDS_TYPES
+    ! Generate logarithmically spaced sequence from ${k1}$ base to the powers
+    ! of ${k1}$ start and end. [base^start, ... , base^end]
+    ! Different combinations of parameter types will lead to different result types.
+    ! Those combinations are indicated in the body of each function.
+    #:set RName = rname("logspace", 1, t1, k1, "n_rbase")
+    pure module function ${RName}$(start, end, n, base) result(res)
+      ${t1}$, intent(in) :: start
+      ${t1}$, intent(in) :: end
+      integer, intent(in) :: n
+      real(${k1}$), intent(in) :: base
+      ! complex(${k1}$) endpoints + real(${k1}$) base = complex(${k1}$) result
+      ${t1}$ :: res(max(n, 0))
+
+      ${t1}$ :: exponents(max(n, 0))
+      exponents = linspace(start, end, n)
+      res = base ** exponents
+    end function ${RName}$
+
+    #:set RName = rname("logspace", 1, t1, k1, "n_cbase")
+    pure module function ${RName}$(start, end, n, base) result(res)
+      ${t1}$, intent(in) :: start
+      ${t1}$, intent(in) :: end
+      integer, intent(in) :: n
+      complex(${k1}$), intent(in) :: base
+      ! complex(${k1}$) endpoints + complex(${k1}$) base = complex(${k1}$) result
+      ${t1}$ :: res(max(n, 0))
+
+      ${t1}$ :: exponents(max(n, 0))
+      exponents = linspace(start, end, n)
+      res = base ** exponents
+    end function ${RName}$
+
+    #:set RName = rname("logspace", 1, t1, k1, "n_ibase")
+    pure module function ${RName}$(start, end, n, base) result(res)
+      ${t1}$, intent(in) :: start
+      ${t1}$, intent(in) :: end
+      integer, intent(in) :: n
+      integer, intent(in) :: base
+      ! complex(${k1}$) endpoints + integer base = complex(${k1}$) result
+      ${t1}$ :: res(max(n, 0))
+
+      ${t1}$ :: exponents(max(n, 0))
+      exponents = linspace(start, end, n)
+      res = base ** exponents
+    end function ${RName}$
+  #:endfor
+
+  #:for k1 in REAL_KINDS
+    #:set RName = rname("logspace", 1, "integer(int32)", "int32", "n_r" + str(k1) + "base")
+    pure module function ${RName}$(start, end, n, base) result(res)
+      integer, intent(in) :: start
+      integer, intent(in) :: end
+      integer, intent(in) :: n
+      real(${k1}$), intent(in) :: base
+      ! integer endpoints + real(${k1}$) base = real(${k1}$) result
+      real(${k1}$) :: res(max(n, 0))
+
+      integer :: exponents(max(n, 0))
+      exponents = linspace(start, end, n)
+      res = base ** exponents
+    end function ${RName}$
+
+    #:set RName = rname("logspace", 1, "integer(int32)", "int32", "n_c" + str(k1) + "base")
+    pure module function ${RName}$(start, end, n, base) result(res)
+      integer, intent(in) :: start
+      integer, intent(in) :: end
+      integer, intent(in) :: n
+      complex(${k1}$), intent(in) :: base
+      ! integer endpoints + complex(${k1}$) base = complex(${k1}$) result
+      complex(${k1}$) :: res(max(n, 0))
+
+      integer :: exponents(max(n, 0))
+      exponents = linspace(start, end, n)
+      res = base ** exponents
+    end function ${RName}$
+  #:endfor
+
+    #:set RName = rname("logspace", 1, "integer(int32)", "int32", "n_ibase")
+    pure module function ${RName}$(start, end, n, base) result(res)
+      integer, intent(in) :: start
+      integer, intent(in) :: end
+      integer, intent(in) :: n
+      integer, intent(in) :: base
+      ! integer endpoints + integer base = integer result
+      integer :: res(max(n, 0))
+
+      integer :: exponents(max(n, 0))
+      exponents = linspace(start, end, n)
+      res = base ** exponents
+    end function ${RName}$
 end module stdlib_math
