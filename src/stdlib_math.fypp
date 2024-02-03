@@ -760,6 +760,7 @@ contains
 
         !> Use a quick exit for the common case, to avoid memory allocation.
         if (size_prepend == 0 .and. size_append == 0 .and. n_ == 1) then
+            allocate(y(size_x-1))
             y = x(2:) - x(1:size_x-1)
             return
         end if
@@ -773,6 +774,7 @@ contains
         do i = 1, n_
             work(1:size_work-i) = work(2:size_work-i+1) - work(1:size_work-i)
         end do
+        allocate(y(size_work-n_))
         y = work(1:size_work-n_)
         end block
 
@@ -816,6 +818,7 @@ contains
         
         !> Use a quick exit for the common case, to avoid memory allocation.
         if (size_prepend == 0 .and. size_append == 0 .and. n_ == 1) then
+            allocate(y(size(x, 1), size(x, 2)))
             if (dim_ == 1) then
                 y = x(2:, :) - x(1:size_x-1, :)
             elseif (dim_ == 2) then
@@ -833,7 +836,7 @@ contains
             do i = 1, n_
                 work(1:size_work-i, :) = work(2:size_work-i+1, :) - work(1:size_work-i, :)
             end do
-
+            allocate(y(size_work-n_, size(x, 2)))
             y = work(1:size_work-n_, :)
             end block
             
@@ -846,6 +849,7 @@ contains
             do i = 1, n_
                 work(:, 1:size_work-i) = work(:, 2:size_work-i+1) - work(:, 1:size_work-i)
             end do
+            allocate(y(size(x, 1), size_work-n_))
             y = work(:, 1:size_work-n_)
             end block
             
