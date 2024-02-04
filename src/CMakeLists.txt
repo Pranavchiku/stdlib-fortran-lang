@@ -51,8 +51,8 @@ set(fppFiles
     stdlib_math.fypp
     # stdlib_math_linspace.fypp
     # stdlib_math_logspace.fypp
-    stdlib_math_arange.fypp
-    stdlib_math_is_close.fypp
+    # stdlib_math_arange.fypp
+    # stdlib_math_is_close.fypp
     # stdlib_math_all_close.fypp
     # stdlib_math_diff.fypp
     # stdlib_string_type.fypp
