@@ -46,4 +46,4 @@ make VERBOSE=1
 ./example/math/example_math_argpi
 ./example/math/example_math_is_close
 
-git clean -dfx
+# git clean -dfx
