@@ -10,7 +10,4 @@ program example_logspace_int
   real(dp) :: r(n) ! Integer values raised to real powers results in real values
 
   r = logspace(start, end, n)
-  print *, "r = ", r
-  print *, sum(r)
-  ! if (abs(sum(r) - 2985172992.0000000_dp) > 1e-12) error stop ! TODO: fix
 end program example_logspace_int

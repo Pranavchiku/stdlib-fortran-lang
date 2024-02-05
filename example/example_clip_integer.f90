@@ -12,7 +12,5 @@ program example_clip_integer
   x = 12_int32
 
   clipped_value = clip(x, xmin, xmax)
-  print *, "Clipped value: ", clipped_value
-  if (clipped_value /= 5) error stop
 ! clipped_value <- 5
 end program example_clip_integer

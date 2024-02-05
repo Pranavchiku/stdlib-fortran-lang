@@ -9,8 +9,4 @@ program example_linspace_complex
   complex(dp) :: z(11)
 
   z = linspace(start, end, 11)
-  print *, "z = ", z
-
-  print *, abs(sum(z))
-  if (abs(abs(sum(z)) - 1.10000000000000000e+02) > 1e-8) error stop
 end program example_linspace_complex

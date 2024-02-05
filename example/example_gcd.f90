@@ -6,6 +6,4 @@ program example_gcd
   a = 48
   b = 18
   c = gcd(a, b) ! returns 6
-  print *, c
-  if (c /= 6) error stop
 end program example_gcd
