@@ -9,4 +9,7 @@ program example_linspace_int16
   real(dp) :: r(15)
 
   r = linspace(start, end, 15)
+  print *, "r = ", r
+  print *, sum(r)
+  if (abs(sum(r) - 247.5_dp) > 1e-12) error stop
 end program example_linspace_int16
