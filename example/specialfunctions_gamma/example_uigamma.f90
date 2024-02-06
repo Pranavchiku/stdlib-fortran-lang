@@ -3,10 +3,12 @@ program example_uigamma
   implicit none
 
   print *, uig(3, -5.0)
+  if (abs(uig(3, -5.0) - 2523.02295) > 1.0E-6) error stop
 
 !2523.02295
 
   print *, uig(2.3, 5.0)
+  if (abs(uig(2.3, 5.0) - 6.95552528E-02) > 1.0E-6) error stop
 
 !6.95552528E-02
 end program example_uigamma
