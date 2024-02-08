@@ -1,7 +1,6 @@
 set -ex
-FC=lfortran cmake .
+FC=gfortran cmake .
 make fortran_stdlib
-cp src/*.mod example/linalg
 make VERBOSE=1
 
 ./example/linalg/example_eye1		
