@@ -9,4 +9,5 @@ program example_eye2
   B = diag([1, 1, 1, 1])
   print *, B
   print *, all(A == B) ! prints .true.
+  if (.not. all(A == B)) error stop
 end program example_eye2

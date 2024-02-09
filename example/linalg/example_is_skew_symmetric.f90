@@ -6,5 +6,7 @@ program example_is_skew_symmetric
   A = reshape([0., -3., 3., 0.], shape(A))
   B = reshape([0., 3., 3., 0.], shape(B))
   res = is_skew_symmetric(A) ! returns .true.
+  if (.not. res) error stop
   res = is_skew_symmetric(B) ! returns .false.
+  if (res) error stop
 end program example_is_skew_symmetric
