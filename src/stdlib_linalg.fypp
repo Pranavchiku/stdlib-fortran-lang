@@ -96,10 +96,7 @@ module stdlib_linalg
     !! Computes the cross product of two vectors, returning a rank-1 and size-3 array
     !! ([Specification](../page/specs/stdlib_linalg.html#cross_product-computes-the-cross-product-of-two-3-d-vectors))
     #:for k1, t1 in RCI_KINDS_TYPES
-      pure module function cross_product_${t1[0]}$${k1}$(a, b) result(res)
-        ${t1}$, intent(in) :: a(3), b(3)
-        ${t1}$ :: res(3)
-      end function cross_product_${t1[0]}$${k1}$
+      procedure :: cross_product_${t1[0]}$${k1}$
     #:endfor
   end interface cross_product
 
@@ -527,5 +524,17 @@ contains
          end do
       end do
     end function kronecker_product_${t1[0]}$${k1}$
+  #:endfor
+
+  #:for k1, t1 in RCI_KINDS_TYPES
+  pure function cross_product_${t1[0]}$${k1}$(a, b) result(res)
+      ${t1}$, intent(in) :: a(3), b(3)
+      ${t1}$ :: res(3)
+
+      res(1) = a(2) * b(3) - a(3) * b(2)
+      res(2) = a(3) * b(1) - a(1) * b(3)
+      res(3) = a(1) * b(2) - a(2) * b(1)
+
+  end function cross_product_${t1[0]}$${k1}$
   #:endfor
 end module stdlib_linalg
