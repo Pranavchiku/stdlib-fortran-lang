@@ -382,7 +382,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_triangular): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
      
         res = .true. !otherwise A is triangular of the requested type
@@ -420,7 +420,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_hessenberg): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
         res = .true. !otherwise A is Hessenberg of the requested type
       end function is_hessenberg_${t1[0]}$${k1}$
