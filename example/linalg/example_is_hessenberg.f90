@@ -6,5 +6,7 @@ program example_is_hessenberg
   A = reshape([1., 2., 0., 4., 5., 6., 7., 8., 9.], shape(A))
   B = reshape([1., 2., 3., 4., 5., 6., 7., 8., 9.], shape(B))
   res = is_hessenberg(A, 'u') ! returns .true.
+  if (.not. res) error stop
   res = is_hessenberg(B, 'u') ! returns .false.
+  if (res) error stop
 end program example_is_hessenberg
