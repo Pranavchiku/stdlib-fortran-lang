@@ -31,154 +31,42 @@ module stdlib_linalg
       !
       ! Vector to matrix
       !
-      module function diag_rsp(v) result(res)
-        real(sp), intent(in) :: v(:)
-        real(sp) :: res(size(v),size(v))
-      end function diag_rsp
-      module function diag_rdp(v) result(res)
-        real(dp), intent(in) :: v(:)
-        real(dp) :: res(size(v),size(v))
-      end function diag_rdp
-      module function diag_csp(v) result(res)
-        complex(sp), intent(in) :: v(:)
-        complex(sp) :: res(size(v),size(v))
-      end function diag_csp
-      module function diag_cdp(v) result(res)
-        complex(dp), intent(in) :: v(:)
-        complex(dp) :: res(size(v),size(v))
-      end function diag_cdp
-      module function diag_iint8(v) result(res)
-        integer(int8), intent(in) :: v(:)
-        integer(int8) :: res(size(v),size(v))
-      end function diag_iint8
-      module function diag_iint16(v) result(res)
-        integer(int16), intent(in) :: v(:)
-        integer(int16) :: res(size(v),size(v))
-      end function diag_iint16
-      module function diag_iint32(v) result(res)
-        integer(int32), intent(in) :: v(:)
-        integer(int32) :: res(size(v),size(v))
-      end function diag_iint32
-      module function diag_iint64(v) result(res)
-        integer(int64), intent(in) :: v(:)
-        integer(int64) :: res(size(v),size(v))
-      end function diag_iint64
-      module function diag_rsp_k(v,k) result(res)
-        real(sp), intent(in) :: v(:)
-        integer, intent(in) :: k
-        real(sp) :: res(size(v)+abs(k),size(v)+abs(k))
-      end function diag_rsp_k
-      module function diag_rdp_k(v,k) result(res)
-        real(dp), intent(in) :: v(:)
-        integer, intent(in) :: k
-        real(dp) :: res(size(v)+abs(k),size(v)+abs(k))
-      end function diag_rdp_k
-      module function diag_csp_k(v,k) result(res)
-        complex(sp), intent(in) :: v(:)
-        integer, intent(in) :: k
-        complex(sp) :: res(size(v)+abs(k),size(v)+abs(k))
-      end function diag_csp_k
-      module function diag_cdp_k(v,k) result(res)
-        complex(dp), intent(in) :: v(:)
-        integer, intent(in) :: k
-        complex(dp) :: res(size(v)+abs(k),size(v)+abs(k))
-      end function diag_cdp_k
-      module function diag_iint8_k(v,k) result(res)
-        integer(int8), intent(in) :: v(:)
-        integer, intent(in) :: k
-        integer(int8) :: res(size(v)+abs(k),size(v)+abs(k))
-      end function diag_iint8_k
-      module function diag_iint16_k(v,k) result(res)
-        integer(int16), intent(in) :: v(:)
-        integer, intent(in) :: k
-        integer(int16) :: res(size(v)+abs(k),size(v)+abs(k))
-      end function diag_iint16_k
-      module function diag_iint32_k(v,k) result(res)
-        integer(int32), intent(in) :: v(:)
-        integer, intent(in) :: k
-        integer(int32) :: res(size(v)+abs(k),size(v)+abs(k))
-      end function diag_iint32_k
-      module function diag_iint64_k(v,k) result(res)
-        integer(int64), intent(in) :: v(:)
-        integer, intent(in) :: k
-        integer(int64) :: res(size(v)+abs(k),size(v)+abs(k))
-      end function diag_iint64_k
+      procedure :: diag_rsp
+      procedure :: diag_rdp
+      procedure :: diag_csp
+      procedure :: diag_cdp
+      procedure :: diag_iint8
+      procedure :: diag_iint16
+      procedure :: diag_iint32
+      procedure :: diag_iint64
+      procedure :: diag_rsp_k
+      procedure :: diag_rdp_k
+      procedure :: diag_csp_k
+      procedure :: diag_cdp_k
+      procedure :: diag_iint8_k
+      procedure :: diag_iint16_k
+      procedure :: diag_iint32_k
+      procedure :: diag_iint64_k
 
       !
       ! Matrix to vector
       !
-      module function diag_rsp_mat(A) result(res)
-        real(sp), intent(in) :: A(:,:)
-        real(sp) :: res(minval(shape(A)))
-      end function diag_rsp_mat
-      module function diag_rdp_mat(A) result(res)
-        real(dp), intent(in) :: A(:,:)
-        real(dp) :: res(minval(shape(A)))
-      end function diag_rdp_mat
-      module function diag_csp_mat(A) result(res)
-        complex(sp), intent(in) :: A(:,:)
-        complex(sp) :: res(minval(shape(A)))
-      end function diag_csp_mat
-      module function diag_cdp_mat(A) result(res)
-        complex(dp), intent(in) :: A(:,:)
-        complex(dp) :: res(minval(shape(A)))
-      end function diag_cdp_mat
-      module function diag_iint8_mat(A) result(res)
-        integer(int8), intent(in) :: A(:,:)
-        integer(int8) :: res(minval(shape(A)))
-      end function diag_iint8_mat
-      module function diag_iint16_mat(A) result(res)
-        integer(int16), intent(in) :: A(:,:)
-        integer(int16) :: res(minval(shape(A)))
-      end function diag_iint16_mat
-      module function diag_iint32_mat(A) result(res)
-        integer(int32), intent(in) :: A(:,:)
-        integer(int32) :: res(minval(shape(A)))
-      end function diag_iint32_mat
-      module function diag_iint64_mat(A) result(res)
-        integer(int64), intent(in) :: A(:,:)
-        integer(int64) :: res(minval(shape(A)))
-      end function diag_iint64_mat
-      module function diag_rsp_mat_k(A,k) result(res)
-        real(sp), intent(in) :: A(:,:)
-        integer, intent(in) :: k
-        real(sp) :: res(minval(shape(A))-abs(k))
-      end function diag_rsp_mat_k
-      module function diag_rdp_mat_k(A,k) result(res)
-        real(dp), intent(in) :: A(:,:)
-        integer, intent(in) :: k
-        real(dp) :: res(minval(shape(A))-abs(k))
-      end function diag_rdp_mat_k
-      module function diag_csp_mat_k(A,k) result(res)
-        complex(sp), intent(in) :: A(:,:)
-        integer, intent(in) :: k
-        complex(sp) :: res(minval(shape(A))-abs(k))
-      end function diag_csp_mat_k
-      module function diag_cdp_mat_k(A,k) result(res)
-        complex(dp), intent(in) :: A(:,:)
-        integer, intent(in) :: k
-        complex(dp) :: res(minval(shape(A))-abs(k))
-      end function diag_cdp_mat_k
-      module function diag_iint8_mat_k(A,k) result(res)
-        integer(int8), intent(in) :: A(:,:)
-        integer, intent(in) :: k
-        integer(int8) :: res(minval(shape(A))-abs(k))
-      end function diag_iint8_mat_k
-      module function diag_iint16_mat_k(A,k) result(res)
-        integer(int16), intent(in) :: A(:,:)
-        integer, intent(in) :: k
-        integer(int16) :: res(minval(shape(A))-abs(k))
-      end function diag_iint16_mat_k
-      module function diag_iint32_mat_k(A,k) result(res)
-        integer(int32), intent(in) :: A(:,:)
-        integer, intent(in) :: k
-        integer(int32) :: res(minval(shape(A))-abs(k))
-      end function diag_iint32_mat_k
-      module function diag_iint64_mat_k(A,k) result(res)
-        integer(int64), intent(in) :: A(:,:)
-        integer, intent(in) :: k
-        integer(int64) :: res(minval(shape(A))-abs(k))
-      end function diag_iint64_mat_k
+      procedure :: diag_rsp_mat
+      procedure :: diag_rdp_mat
+      procedure :: diag_csp_mat
+      procedure :: diag_cdp_mat
+      procedure :: diag_iint8_mat
+      procedure :: diag_iint16_mat
+      procedure :: diag_iint32_mat
+      procedure :: diag_iint64_mat
+      procedure :: diag_rsp_mat_k
+      procedure :: diag_rdp_mat_k
+      procedure :: diag_csp_mat_k
+      procedure :: diag_cdp_mat_k
+      procedure :: diag_iint8_mat_k
+      procedure :: diag_iint16_mat_k
+      procedure :: diag_iint32_mat_k
+      procedure :: diag_iint64_mat_k
   end interface
 
 
@@ -207,38 +95,14 @@ module stdlib_linalg
     !! Computes the outer product of two vectors, returning a rank-2 array
     !! ([Specification](../page/specs/stdlib_linalg.html#
     !! outer_product-computes-the-outer-product-of-two-vectors))
-      pure module function outer_product_rsp(u, v) result(res)
-        real(sp), intent(in) :: u(:), v(:)
-        real(sp) :: res(size(u),size(v))
-      end function outer_product_rsp
-      pure module function outer_product_rdp(u, v) result(res)
-        real(dp), intent(in) :: u(:), v(:)
-        real(dp) :: res(size(u),size(v))
-      end function outer_product_rdp
-      pure module function outer_product_csp(u, v) result(res)
-        complex(sp), intent(in) :: u(:), v(:)
-        complex(sp) :: res(size(u),size(v))
-      end function outer_product_csp
-      pure module function outer_product_cdp(u, v) result(res)
-        complex(dp), intent(in) :: u(:), v(:)
-        complex(dp) :: res(size(u),size(v))
-      end function outer_product_cdp
-      pure module function outer_product_iint8(u, v) result(res)
-        integer(int8), intent(in) :: u(:), v(:)
-        integer(int8) :: res(size(u),size(v))
-      end function outer_product_iint8
-      pure module function outer_product_iint16(u, v) result(res)
-        integer(int16), intent(in) :: u(:), v(:)
-        integer(int16) :: res(size(u),size(v))
-      end function outer_product_iint16
-      pure module function outer_product_iint32(u, v) result(res)
-        integer(int32), intent(in) :: u(:), v(:)
-        integer(int32) :: res(size(u),size(v))
-      end function outer_product_iint32
-      pure module function outer_product_iint64(u, v) result(res)
-        integer(int64), intent(in) :: u(:), v(:)
-        integer(int64) :: res(size(u),size(v))
-      end function outer_product_iint64
+      procedure :: outer_product_rsp
+      procedure :: outer_product_rdp
+      procedure :: outer_product_csp
+      procedure :: outer_product_cdp
+      procedure :: outer_product_iint8
+      procedure :: outer_product_iint16
+      procedure :: outer_product_iint32
+      procedure :: outer_product_iint64
   end interface outer_product
 
   interface kronecker_product
@@ -247,38 +111,14 @@ module stdlib_linalg
     !! Computes the Kronecker product of two arrays of size M1xN1, and of M2xN2, returning an (M1*M2)x(N1*N2) array
     !! ([Specification](../page/specs/stdlib_linalg.html#
     !! kronecker_product-computes-the-kronecker-product-of-two-matrices))
-      pure module function kronecker_product_rsp(A, B) result(C)
-        real(sp), intent(in) :: A(:,:), B(:,:)
-        real(sp) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
-      end function kronecker_product_rsp
-      pure module function kronecker_product_rdp(A, B) result(C)
-        real(dp), intent(in) :: A(:,:), B(:,:)
-        real(dp) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
-      end function kronecker_product_rdp
-      pure module function kronecker_product_csp(A, B) result(C)
-        complex(sp), intent(in) :: A(:,:), B(:,:)
-        complex(sp) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
-      end function kronecker_product_csp
-      pure module function kronecker_product_cdp(A, B) result(C)
-        complex(dp), intent(in) :: A(:,:), B(:,:)
-        complex(dp) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
-      end function kronecker_product_cdp
-      pure module function kronecker_product_iint8(A, B) result(C)
-        integer(int8), intent(in) :: A(:,:), B(:,:)
-        integer(int8) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
-      end function kronecker_product_iint8
-      pure module function kronecker_product_iint16(A, B) result(C)
-        integer(int16), intent(in) :: A(:,:), B(:,:)
-        integer(int16) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
-      end function kronecker_product_iint16
-      pure module function kronecker_product_iint32(A, B) result(C)
-        integer(int32), intent(in) :: A(:,:), B(:,:)
-        integer(int32) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
-      end function kronecker_product_iint32
-      pure module function kronecker_product_iint64(A, B) result(C)
-        integer(int64), intent(in) :: A(:,:), B(:,:)
-        integer(int64) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
-      end function kronecker_product_iint64
+      procedure :: kronecker_product_rsp
+      procedure :: kronecker_product_rdp
+      procedure :: kronecker_product_csp
+      procedure :: kronecker_product_cdp
+      procedure :: kronecker_product_iint8
+      procedure :: kronecker_product_iint16
+      procedure :: kronecker_product_iint32
+      procedure :: kronecker_product_iint64
   end interface kronecker_product
 
 
@@ -288,38 +128,14 @@ module stdlib_linalg
     !!
     !! Computes the cross product of two vectors, returning a rank-1 and size-3 array
     !! ([Specification](../page/specs/stdlib_linalg.html#cross_product-computes-the-cross-product-of-two-3-d-vectors))
-      pure module function cross_product_rsp(a, b) result(res)
-        real(sp), intent(in) :: a(3), b(3)
-        real(sp) :: res(3)
-      end function cross_product_rsp
-      pure module function cross_product_rdp(a, b) result(res)
-        real(dp), intent(in) :: a(3), b(3)
-        real(dp) :: res(3)
-      end function cross_product_rdp
-      pure module function cross_product_csp(a, b) result(res)
-        complex(sp), intent(in) :: a(3), b(3)
-        complex(sp) :: res(3)
-      end function cross_product_csp
-      pure module function cross_product_cdp(a, b) result(res)
-        complex(dp), intent(in) :: a(3), b(3)
-        complex(dp) :: res(3)
-      end function cross_product_cdp
-      pure module function cross_product_iint8(a, b) result(res)
-        integer(int8), intent(in) :: a(3), b(3)
-        integer(int8) :: res(3)
-      end function cross_product_iint8
-      pure module function cross_product_iint16(a, b) result(res)
-        integer(int16), intent(in) :: a(3), b(3)
-        integer(int16) :: res(3)
-      end function cross_product_iint16
-      pure module function cross_product_iint32(a, b) result(res)
-        integer(int32), intent(in) :: a(3), b(3)
-        integer(int32) :: res(3)
-      end function cross_product_iint32
-      pure module function cross_product_iint64(a, b) result(res)
-        integer(int64), intent(in) :: a(3), b(3)
-        integer(int64) :: res(3)
-      end function cross_product_iint64
+      procedure :: cross_product_rsp
+      procedure :: cross_product_rdp
+      procedure :: cross_product_csp
+      procedure :: cross_product_cdp
+      procedure :: cross_product_iint8
+      procedure :: cross_product_iint16
+      procedure :: cross_product_iint32
+      procedure :: cross_product_iint64
   end interface cross_product
 
 
@@ -1191,7 +1007,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_triangular): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
      
         res = .true. !otherwise A is triangular of the requested type
@@ -1225,7 +1041,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_triangular): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
      
         res = .true. !otherwise A is triangular of the requested type
@@ -1259,7 +1075,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_triangular): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
      
         res = .true. !otherwise A is triangular of the requested type
@@ -1293,7 +1109,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_triangular): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
      
         res = .true. !otherwise A is triangular of the requested type
@@ -1327,7 +1143,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_triangular): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
      
         res = .true. !otherwise A is triangular of the requested type
@@ -1361,7 +1177,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_triangular): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
      
         res = .true. !otherwise A is triangular of the requested type
@@ -1395,7 +1211,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_triangular): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
      
         res = .true. !otherwise A is triangular of the requested type
@@ -1429,7 +1245,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_triangular): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
      
         res = .true. !otherwise A is triangular of the requested type
@@ -1465,7 +1281,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_hessenberg): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
         res = .true. !otherwise A is Hessenberg of the requested type
       end function is_hessenberg_rsp
@@ -1498,7 +1314,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_hessenberg): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
         res = .true. !otherwise A is Hessenberg of the requested type
       end function is_hessenberg_rdp
@@ -1531,7 +1347,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_hessenberg): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
         res = .true. !otherwise A is Hessenberg of the requested type
       end function is_hessenberg_csp
@@ -1564,7 +1380,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_hessenberg): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
         res = .true. !otherwise A is Hessenberg of the requested type
       end function is_hessenberg_cdp
@@ -1597,7 +1413,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_hessenberg): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
         res = .true. !otherwise A is Hessenberg of the requested type
       end function is_hessenberg_iint8
@@ -1630,7 +1446,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_hessenberg): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
         res = .true. !otherwise A is Hessenberg of the requested type
       end function is_hessenberg_iint16
@@ -1663,7 +1479,7 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_hessenberg): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
         res = .true. !otherwise A is Hessenberg of the requested type
       end function is_hessenberg_iint32
@@ -1696,9 +1512,770 @@ contains
               end do
            end do
         else
-           call error_stop("ERROR (is_hessenberg): second argument must be one of {'u','U','l','L'}")
+           error stop
         end if
         res = .true. !otherwise A is Hessenberg of the requested type
       end function is_hessenberg_iint64
     
+
+      pure function diag_rsp(v) result(res)
+        real(sp), intent(in) :: v(:)
+        real(sp) :: res(size(v),size(v))
+        integer :: i
+        res = 0
+        do i = 1, size(v)
+          res(i,i) = v(i)
+        end do
+      end function diag_rsp
+      pure function diag_rdp(v) result(res)
+        real(dp), intent(in) :: v(:)
+        real(dp) :: res(size(v),size(v))
+        integer :: i
+        res = 0
+        do i = 1, size(v)
+          res(i,i) = v(i)
+        end do
+      end function diag_rdp
+      pure function diag_csp(v) result(res)
+        complex(sp), intent(in) :: v(:)
+        complex(sp) :: res(size(v),size(v))
+        integer :: i
+        res = 0
+        do i = 1, size(v)
+          res(i,i) = v(i)
+        end do
+      end function diag_csp
+      pure function diag_cdp(v) result(res)
+        complex(dp), intent(in) :: v(:)
+        complex(dp) :: res(size(v),size(v))
+        integer :: i
+        res = 0
+        do i = 1, size(v)
+          res(i,i) = v(i)
+        end do
+      end function diag_cdp
+      pure function diag_iint8(v) result(res)
+        integer(int8), intent(in) :: v(:)
+        integer(int8) :: res(size(v),size(v))
+        integer :: i
+        res = 0
+        do i = 1, size(v)
+          res(i,i) = v(i)
+        end do
+      end function diag_iint8
+      pure function diag_iint16(v) result(res)
+        integer(int16), intent(in) :: v(:)
+        integer(int16) :: res(size(v),size(v))
+        integer :: i
+        res = 0
+        do i = 1, size(v)
+          res(i,i) = v(i)
+        end do
+      end function diag_iint16
+      pure function diag_iint32(v) result(res)
+        integer(int32), intent(in) :: v(:)
+        integer(int32) :: res(size(v),size(v))
+        integer :: i
+        res = 0
+        do i = 1, size(v)
+          res(i,i) = v(i)
+        end do
+      end function diag_iint32
+      pure function diag_iint64(v) result(res)
+        integer(int64), intent(in) :: v(:)
+        integer(int64) :: res(size(v),size(v))
+        integer :: i
+        res = 0
+        do i = 1, size(v)
+          res(i,i) = v(i)
+        end do
+      end function diag_iint64
+
+
+      pure function diag_rsp_k(v,k) result(res)
+        real(sp), intent(in) :: v(:)
+        integer, intent(in) :: k
+        real(sp) :: res(size(v)+abs(k),size(v)+abs(k))
+        integer :: i, sz
+        sz = size(v)
+        res = 0
+        if (k > 0) then
+          do i = 1, sz
+              res(i,k+i) = v(i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i+abs(k),i) = v(i)
+          end do
+        else
+          do i = 1, sz
+              res(i,i) = v(i)
+          end do
+        end if
+      end function diag_rsp_k
+      pure function diag_rdp_k(v,k) result(res)
+        real(dp), intent(in) :: v(:)
+        integer, intent(in) :: k
+        real(dp) :: res(size(v)+abs(k),size(v)+abs(k))
+        integer :: i, sz
+        sz = size(v)
+        res = 0
+        if (k > 0) then
+          do i = 1, sz
+              res(i,k+i) = v(i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i+abs(k),i) = v(i)
+          end do
+        else
+          do i = 1, sz
+              res(i,i) = v(i)
+          end do
+        end if
+      end function diag_rdp_k
+      pure function diag_csp_k(v,k) result(res)
+        complex(sp), intent(in) :: v(:)
+        integer, intent(in) :: k
+        complex(sp) :: res(size(v)+abs(k),size(v)+abs(k))
+        integer :: i, sz
+        sz = size(v)
+        res = 0
+        if (k > 0) then
+          do i = 1, sz
+              res(i,k+i) = v(i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i+abs(k),i) = v(i)
+          end do
+        else
+          do i = 1, sz
+              res(i,i) = v(i)
+          end do
+        end if
+      end function diag_csp_k
+      pure function diag_cdp_k(v,k) result(res)
+        complex(dp), intent(in) :: v(:)
+        integer, intent(in) :: k
+        complex(dp) :: res(size(v)+abs(k),size(v)+abs(k))
+        integer :: i, sz
+        sz = size(v)
+        res = 0
+        if (k > 0) then
+          do i = 1, sz
+              res(i,k+i) = v(i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i+abs(k),i) = v(i)
+          end do
+        else
+          do i = 1, sz
+              res(i,i) = v(i)
+          end do
+        end if
+      end function diag_cdp_k
+      pure function diag_iint8_k(v,k) result(res)
+        integer(int8), intent(in) :: v(:)
+        integer, intent(in) :: k
+        integer(int8) :: res(size(v)+abs(k),size(v)+abs(k))
+        integer :: i, sz
+        sz = size(v)
+        res = 0
+        if (k > 0) then
+          do i = 1, sz
+              res(i,k+i) = v(i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i+abs(k),i) = v(i)
+          end do
+        else
+          do i = 1, sz
+              res(i,i) = v(i)
+          end do
+        end if
+      end function diag_iint8_k
+      pure function diag_iint16_k(v,k) result(res)
+        integer(int16), intent(in) :: v(:)
+        integer, intent(in) :: k
+        integer(int16) :: res(size(v)+abs(k),size(v)+abs(k))
+        integer :: i, sz
+        sz = size(v)
+        res = 0
+        if (k > 0) then
+          do i = 1, sz
+              res(i,k+i) = v(i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i+abs(k),i) = v(i)
+          end do
+        else
+          do i = 1, sz
+              res(i,i) = v(i)
+          end do
+        end if
+      end function diag_iint16_k
+      pure function diag_iint32_k(v,k) result(res)
+        integer(int32), intent(in) :: v(:)
+        integer, intent(in) :: k
+        integer(int32) :: res(size(v)+abs(k),size(v)+abs(k))
+        integer :: i, sz
+        sz = size(v)
+        res = 0
+        if (k > 0) then
+          do i = 1, sz
+              res(i,k+i) = v(i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i+abs(k),i) = v(i)
+          end do
+        else
+          do i = 1, sz
+              res(i,i) = v(i)
+          end do
+        end if
+      end function diag_iint32_k
+      pure function diag_iint64_k(v,k) result(res)
+        integer(int64), intent(in) :: v(:)
+        integer, intent(in) :: k
+        integer(int64) :: res(size(v)+abs(k),size(v)+abs(k))
+        integer :: i, sz
+        sz = size(v)
+        res = 0
+        if (k > 0) then
+          do i = 1, sz
+              res(i,k+i) = v(i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i+abs(k),i) = v(i)
+          end do
+        else
+          do i = 1, sz
+              res(i,i) = v(i)
+          end do
+        end if
+      end function diag_iint64_k
+
+      pure function diag_rsp_mat(A) result(res)
+        real(sp), intent(in) :: A(:,:)
+        real(sp) :: res(minval(shape(A)))
+        integer :: i
+        do i = 1, minval(shape(A))
+          res(i) = A(i,i)
+        end do
+      end function diag_rsp_mat
+      pure function diag_rdp_mat(A) result(res)
+        real(dp), intent(in) :: A(:,:)
+        real(dp) :: res(minval(shape(A)))
+        integer :: i
+        do i = 1, minval(shape(A))
+          res(i) = A(i,i)
+        end do
+      end function diag_rdp_mat
+      pure function diag_csp_mat(A) result(res)
+        complex(sp), intent(in) :: A(:,:)
+        complex(sp) :: res(minval(shape(A)))
+        integer :: i
+        do i = 1, minval(shape(A))
+          res(i) = A(i,i)
+        end do
+      end function diag_csp_mat
+      pure function diag_cdp_mat(A) result(res)
+        complex(dp), intent(in) :: A(:,:)
+        complex(dp) :: res(minval(shape(A)))
+        integer :: i
+        do i = 1, minval(shape(A))
+          res(i) = A(i,i)
+        end do
+      end function diag_cdp_mat
+      pure function diag_iint8_mat(A) result(res)
+        integer(int8), intent(in) :: A(:,:)
+        integer(int8) :: res(minval(shape(A)))
+        integer :: i
+        do i = 1, minval(shape(A))
+          res(i) = A(i,i)
+        end do
+      end function diag_iint8_mat
+      pure function diag_iint16_mat(A) result(res)
+        integer(int16), intent(in) :: A(:,:)
+        integer(int16) :: res(minval(shape(A)))
+        integer :: i
+        do i = 1, minval(shape(A))
+          res(i) = A(i,i)
+        end do
+      end function diag_iint16_mat
+      pure function diag_iint32_mat(A) result(res)
+        integer(int32), intent(in) :: A(:,:)
+        integer(int32) :: res(minval(shape(A)))
+        integer :: i
+        do i = 1, minval(shape(A))
+          res(i) = A(i,i)
+        end do
+      end function diag_iint32_mat
+      pure function diag_iint64_mat(A) result(res)
+        integer(int64), intent(in) :: A(:,:)
+        integer(int64) :: res(minval(shape(A)))
+        integer :: i
+        do i = 1, minval(shape(A))
+          res(i) = A(i,i)
+        end do
+      end function diag_iint64_mat
+
+      pure function diag_rsp_mat_k(A,k) result(res)
+        real(sp), intent(in) :: A(:,:)
+        integer, intent(in) :: k
+        real(sp) :: res(minval(shape(A))-abs(k))
+        integer :: i, sz
+        sz = minval(shape(A))-abs(k)
+        if (k > 0) then
+          do i = 1, sz
+              res(i) = A(i,k+i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i) = A(i+abs(k),i)
+          end do
+        else
+          do i = 1, sz
+              res(i) = A(i,i)
+          end do
+        end if
+      end function diag_rsp_mat_k
+      pure function diag_rdp_mat_k(A,k) result(res)
+        real(dp), intent(in) :: A(:,:)
+        integer, intent(in) :: k
+        real(dp) :: res(minval(shape(A))-abs(k))
+        integer :: i, sz
+        sz = minval(shape(A))-abs(k)
+        if (k > 0) then
+          do i = 1, sz
+              res(i) = A(i,k+i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i) = A(i+abs(k),i)
+          end do
+        else
+          do i = 1, sz
+              res(i) = A(i,i)
+          end do
+        end if
+      end function diag_rdp_mat_k
+      pure function diag_csp_mat_k(A,k) result(res)
+        complex(sp), intent(in) :: A(:,:)
+        integer, intent(in) :: k
+        complex(sp) :: res(minval(shape(A))-abs(k))
+        integer :: i, sz
+        sz = minval(shape(A))-abs(k)
+        if (k > 0) then
+          do i = 1, sz
+              res(i) = A(i,k+i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i) = A(i+abs(k),i)
+          end do
+        else
+          do i = 1, sz
+              res(i) = A(i,i)
+          end do
+        end if
+      end function diag_csp_mat_k
+      pure function diag_cdp_mat_k(A,k) result(res)
+        complex(dp), intent(in) :: A(:,:)
+        integer, intent(in) :: k
+        complex(dp) :: res(minval(shape(A))-abs(k))
+        integer :: i, sz
+        sz = minval(shape(A))-abs(k)
+        if (k > 0) then
+          do i = 1, sz
+              res(i) = A(i,k+i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i) = A(i+abs(k),i)
+          end do
+        else
+          do i = 1, sz
+              res(i) = A(i,i)
+          end do
+        end if
+      end function diag_cdp_mat_k
+      pure function diag_iint8_mat_k(A,k) result(res)
+        integer(int8), intent(in) :: A(:,:)
+        integer, intent(in) :: k
+        integer(int8) :: res(minval(shape(A))-abs(k))
+        integer :: i, sz
+        sz = minval(shape(A))-abs(k)
+        if (k > 0) then
+          do i = 1, sz
+              res(i) = A(i,k+i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i) = A(i+abs(k),i)
+          end do
+        else
+          do i = 1, sz
+              res(i) = A(i,i)
+          end do
+        end if
+      end function diag_iint8_mat_k
+      pure function diag_iint16_mat_k(A,k) result(res)
+        integer(int16), intent(in) :: A(:,:)
+        integer, intent(in) :: k
+        integer(int16) :: res(minval(shape(A))-abs(k))
+        integer :: i, sz
+        sz = minval(shape(A))-abs(k)
+        if (k > 0) then
+          do i = 1, sz
+              res(i) = A(i,k+i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i) = A(i+abs(k),i)
+          end do
+        else
+          do i = 1, sz
+              res(i) = A(i,i)
+          end do
+        end if
+      end function diag_iint16_mat_k
+      pure function diag_iint32_mat_k(A,k) result(res)
+        integer(int32), intent(in) :: A(:,:)
+        integer, intent(in) :: k
+        integer(int32) :: res(minval(shape(A))-abs(k))
+        integer :: i, sz
+        sz = minval(shape(A))-abs(k)
+        if (k > 0) then
+          do i = 1, sz
+              res(i) = A(i,k+i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i) = A(i+abs(k),i)
+          end do
+        else
+          do i = 1, sz
+              res(i) = A(i,i)
+          end do
+        end if
+      end function diag_iint32_mat_k
+      pure function diag_iint64_mat_k(A,k) result(res)
+        integer(int64), intent(in) :: A(:,:)
+        integer, intent(in) :: k
+        integer(int64) :: res(minval(shape(A))-abs(k))
+        integer :: i, sz
+        sz = minval(shape(A))-abs(k)
+        if (k > 0) then
+          do i = 1, sz
+              res(i) = A(i,k+i)
+          end do
+        else if (k < 0) then
+          do i = 1, sz
+              res(i) = A(i+abs(k),i)
+          end do
+        else
+          do i = 1, sz
+              res(i) = A(i,i)
+          end do
+        end if
+      end function diag_iint64_mat_k
+
+    pure function outer_product_rsp(u, v) result(res)
+      real(sp), intent(in) :: u(:), v(:)
+      real(sp) :: res(size(u),size(v))
+      integer :: col
+      do col = 1, size(v)
+        res(:,col) = v(col) * u
+      end do
+    end function outer_product_rsp
+    pure function outer_product_rdp(u, v) result(res)
+      real(dp), intent(in) :: u(:), v(:)
+      real(dp) :: res(size(u),size(v))
+      integer :: col
+      do col = 1, size(v)
+        res(:,col) = v(col) * u
+      end do
+    end function outer_product_rdp
+    pure function outer_product_csp(u, v) result(res)
+      complex(sp), intent(in) :: u(:), v(:)
+      complex(sp) :: res(size(u),size(v))
+      integer :: col
+      do col = 1, size(v)
+        res(:,col) = v(col) * u
+      end do
+    end function outer_product_csp
+    pure function outer_product_cdp(u, v) result(res)
+      complex(dp), intent(in) :: u(:), v(:)
+      complex(dp) :: res(size(u),size(v))
+      integer :: col
+      do col = 1, size(v)
+        res(:,col) = v(col) * u
+      end do
+    end function outer_product_cdp
+    pure function outer_product_iint8(u, v) result(res)
+      integer(int8), intent(in) :: u(:), v(:)
+      integer(int8) :: res(size(u),size(v))
+      integer :: col
+      do col = 1, size(v)
+        res(:,col) = v(col) * u
+      end do
+    end function outer_product_iint8
+    pure function outer_product_iint16(u, v) result(res)
+      integer(int16), intent(in) :: u(:), v(:)
+      integer(int16) :: res(size(u),size(v))
+      integer :: col
+      do col = 1, size(v)
+        res(:,col) = v(col) * u
+      end do
+    end function outer_product_iint16
+    pure function outer_product_iint32(u, v) result(res)
+      integer(int32), intent(in) :: u(:), v(:)
+      integer(int32) :: res(size(u),size(v))
+      integer :: col
+      do col = 1, size(v)
+        res(:,col) = v(col) * u
+      end do
+    end function outer_product_iint32
+    pure function outer_product_iint64(u, v) result(res)
+      integer(int64), intent(in) :: u(:), v(:)
+      integer(int64) :: res(size(u),size(v))
+      integer :: col
+      do col = 1, size(v)
+        res(:,col) = v(col) * u
+      end do
+    end function outer_product_iint64
+
+
+    pure function kronecker_product_rsp(A, B) result(C)
+      real(sp), intent(in) :: A(:,:), B(:,:)
+      real(sp) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
+      integer :: m1, n1, maxM1, maxN1, maxM2, maxN2
+      
+      maxM1 = size(A, dim=1)
+      maxN1 = size(A, dim=2)
+      maxM2 = size(B, dim=1)
+      maxN2 = size(B, dim=2)
+      
+
+      do n1 = 1, maxN1
+         do m1 = 1, maxM1
+            ! We use the Wikipedia convention for ordering of the matrix elements
+	    ! https://en.wikipedia.org/wiki/Kronecker_product
+            C((m1-1)*maxM2+1:m1*maxM2, (n1-1)*maxN2+1:n1*maxN2) = A(m1, n1) * B(:,:)
+         end do
+      end do
+    end function kronecker_product_rsp
+    pure function kronecker_product_rdp(A, B) result(C)
+      real(dp), intent(in) :: A(:,:), B(:,:)
+      real(dp) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
+      integer :: m1, n1, maxM1, maxN1, maxM2, maxN2
+      
+      maxM1 = size(A, dim=1)
+      maxN1 = size(A, dim=2)
+      maxM2 = size(B, dim=1)
+      maxN2 = size(B, dim=2)
+      
+
+      do n1 = 1, maxN1
+         do m1 = 1, maxM1
+            ! We use the Wikipedia convention for ordering of the matrix elements
+	    ! https://en.wikipedia.org/wiki/Kronecker_product
+            C((m1-1)*maxM2+1:m1*maxM2, (n1-1)*maxN2+1:n1*maxN2) = A(m1, n1) * B(:,:)
+         end do
+      end do
+    end function kronecker_product_rdp
+    pure function kronecker_product_csp(A, B) result(C)
+      complex(sp), intent(in) :: A(:,:), B(:,:)
+      complex(sp) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
+      integer :: m1, n1, maxM1, maxN1, maxM2, maxN2
+      
+      maxM1 = size(A, dim=1)
+      maxN1 = size(A, dim=2)
+      maxM2 = size(B, dim=1)
+      maxN2 = size(B, dim=2)
+      
+
+      do n1 = 1, maxN1
+         do m1 = 1, maxM1
+            ! We use the Wikipedia convention for ordering of the matrix elements
+	    ! https://en.wikipedia.org/wiki/Kronecker_product
+            C((m1-1)*maxM2+1:m1*maxM2, (n1-1)*maxN2+1:n1*maxN2) = A(m1, n1) * B(:,:)
+         end do
+      end do
+    end function kronecker_product_csp
+    pure function kronecker_product_cdp(A, B) result(C)
+      complex(dp), intent(in) :: A(:,:), B(:,:)
+      complex(dp) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
+      integer :: m1, n1, maxM1, maxN1, maxM2, maxN2
+      
+      maxM1 = size(A, dim=1)
+      maxN1 = size(A, dim=2)
+      maxM2 = size(B, dim=1)
+      maxN2 = size(B, dim=2)
+      
+
+      do n1 = 1, maxN1
+         do m1 = 1, maxM1
+            ! We use the Wikipedia convention for ordering of the matrix elements
+	    ! https://en.wikipedia.org/wiki/Kronecker_product
+            C((m1-1)*maxM2+1:m1*maxM2, (n1-1)*maxN2+1:n1*maxN2) = A(m1, n1) * B(:,:)
+         end do
+      end do
+    end function kronecker_product_cdp
+    pure function kronecker_product_iint8(A, B) result(C)
+      integer(int8), intent(in) :: A(:,:), B(:,:)
+      integer(int8) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
+      integer :: m1, n1, maxM1, maxN1, maxM2, maxN2
+      
+      maxM1 = size(A, dim=1)
+      maxN1 = size(A, dim=2)
+      maxM2 = size(B, dim=1)
+      maxN2 = size(B, dim=2)
+      
+
+      do n1 = 1, maxN1
+         do m1 = 1, maxM1
+            ! We use the Wikipedia convention for ordering of the matrix elements
+	    ! https://en.wikipedia.org/wiki/Kronecker_product
+            C((m1-1)*maxM2+1:m1*maxM2, (n1-1)*maxN2+1:n1*maxN2) = A(m1, n1) * B(:,:)
+         end do
+      end do
+    end function kronecker_product_iint8
+    pure function kronecker_product_iint16(A, B) result(C)
+      integer(int16), intent(in) :: A(:,:), B(:,:)
+      integer(int16) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
+      integer :: m1, n1, maxM1, maxN1, maxM2, maxN2
+      
+      maxM1 = size(A, dim=1)
+      maxN1 = size(A, dim=2)
+      maxM2 = size(B, dim=1)
+      maxN2 = size(B, dim=2)
+      
+
+      do n1 = 1, maxN1
+         do m1 = 1, maxM1
+            ! We use the Wikipedia convention for ordering of the matrix elements
+	    ! https://en.wikipedia.org/wiki/Kronecker_product
+            C((m1-1)*maxM2+1:m1*maxM2, (n1-1)*maxN2+1:n1*maxN2) = A(m1, n1) * B(:,:)
+         end do
+      end do
+    end function kronecker_product_iint16
+    pure function kronecker_product_iint32(A, B) result(C)
+      integer(int32), intent(in) :: A(:,:), B(:,:)
+      integer(int32) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
+      integer :: m1, n1, maxM1, maxN1, maxM2, maxN2
+      
+      maxM1 = size(A, dim=1)
+      maxN1 = size(A, dim=2)
+      maxM2 = size(B, dim=1)
+      maxN2 = size(B, dim=2)
+      
+
+      do n1 = 1, maxN1
+         do m1 = 1, maxM1
+            ! We use the Wikipedia convention for ordering of the matrix elements
+	    ! https://en.wikipedia.org/wiki/Kronecker_product
+            C((m1-1)*maxM2+1:m1*maxM2, (n1-1)*maxN2+1:n1*maxN2) = A(m1, n1) * B(:,:)
+         end do
+      end do
+    end function kronecker_product_iint32
+    pure function kronecker_product_iint64(A, B) result(C)
+      integer(int64), intent(in) :: A(:,:), B(:,:)
+      integer(int64) :: C(size(A,dim=1)*size(B,dim=1),size(A,dim=2)*size(B,dim=2))
+      integer :: m1, n1, maxM1, maxN1, maxM2, maxN2
+      
+      maxM1 = size(A, dim=1)
+      maxN1 = size(A, dim=2)
+      maxM2 = size(B, dim=1)
+      maxN2 = size(B, dim=2)
+      
+
+      do n1 = 1, maxN1
+         do m1 = 1, maxM1
+            ! We use the Wikipedia convention for ordering of the matrix elements
+	    ! https://en.wikipedia.org/wiki/Kronecker_product
+            C((m1-1)*maxM2+1:m1*maxM2, (n1-1)*maxN2+1:n1*maxN2) = A(m1, n1) * B(:,:)
+         end do
+      end do
+    end function kronecker_product_iint64
+
+  pure function cross_product_rsp(a, b) result(res)
+      real(sp), intent(in) :: a(3), b(3)
+      real(sp) :: res(3)
+
+      res(1) = a(2) * b(3) - a(3) * b(2)
+      res(2) = a(3) * b(1) - a(1) * b(3)
+      res(3) = a(1) * b(2) - a(2) * b(1)
+
+  end function cross_product_rsp
+  pure function cross_product_rdp(a, b) result(res)
+      real(dp), intent(in) :: a(3), b(3)
+      real(dp) :: res(3)
+
+      res(1) = a(2) * b(3) - a(3) * b(2)
+      res(2) = a(3) * b(1) - a(1) * b(3)
+      res(3) = a(1) * b(2) - a(2) * b(1)
+
+  end function cross_product_rdp
+  pure function cross_product_csp(a, b) result(res)
+      complex(sp), intent(in) :: a(3), b(3)
+      complex(sp) :: res(3)
+
+      res(1) = a(2) * b(3) - a(3) * b(2)
+      res(2) = a(3) * b(1) - a(1) * b(3)
+      res(3) = a(1) * b(2) - a(2) * b(1)
+
+  end function cross_product_csp
+  pure function cross_product_cdp(a, b) result(res)
+      complex(dp), intent(in) :: a(3), b(3)
+      complex(dp) :: res(3)
+
+      res(1) = a(2) * b(3) - a(3) * b(2)
+      res(2) = a(3) * b(1) - a(1) * b(3)
+      res(3) = a(1) * b(2) - a(2) * b(1)
+
+  end function cross_product_cdp
+  pure function cross_product_iint8(a, b) result(res)
+      integer(int8), intent(in) :: a(3), b(3)
+      integer(int8) :: res(3)
+
+      res(1) = a(2) * b(3) - a(3) * b(2)
+      res(2) = a(3) * b(1) - a(1) * b(3)
+      res(3) = a(1) * b(2) - a(2) * b(1)
+
+  end function cross_product_iint8
+  pure function cross_product_iint16(a, b) result(res)
+      integer(int16), intent(in) :: a(3), b(3)
+      integer(int16) :: res(3)
+
+      res(1) = a(2) * b(3) - a(3) * b(2)
+      res(2) = a(3) * b(1) - a(1) * b(3)
+      res(3) = a(1) * b(2) - a(2) * b(1)
+
+  end function cross_product_iint16
+  pure function cross_product_iint32(a, b) result(res)
+      integer(int32), intent(in) :: a(3), b(3)
+      integer(int32) :: res(3)
+
+      res(1) = a(2) * b(3) - a(3) * b(2)
+      res(2) = a(3) * b(1) - a(1) * b(3)
+      res(3) = a(1) * b(2) - a(2) * b(1)
+
+  end function cross_product_iint32
+  pure function cross_product_iint64(a, b) result(res)
+      integer(int64), intent(in) :: a(3), b(3)
+      integer(int64) :: res(3)
+
+      res(1) = a(2) * b(3) - a(3) * b(2)
+      res(2) = a(3) * b(1) - a(1) * b(3)
+      res(3) = a(1) * b(2) - a(2) * b(1)
+
+  end function cross_product_iint64
 end module stdlib_linalg

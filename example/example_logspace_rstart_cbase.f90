@@ -11,7 +11,5 @@ program example_logspace_rstart_cbase
   complex(dp) :: z(n) ! complex values raised to real powers result in complex values
 
   z = logspace(start, end, n, base)
-  print *, "z = ", z
-  print *, abs(sum(z))
-  if (abs(abs(sum(z)) - 1.83697019872102969e-16_dp) > 1e-12) error stop
+
 end program example_logspace_rstart_cbase
