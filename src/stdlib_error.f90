@@ -6,18 +6,13 @@ use stdlib_optval, only: optval
 implicit none
 private
 
-interface ! f{08,18}estop.f90
-    module subroutine error_stop(msg, code)
-        !! version: experimental
-        !!
-        !! Provides a call to `error stop` and allows the user to specify a code and message
-        !! ([Specification](..//page/specs/stdlib_error.html#description_1))
-        character(*), intent(in) :: msg
-        integer, intent(in), optional :: code
-    end subroutine error_stop
+public :: check, error_stop
+
+interface error_stop
+    procedure :: error_stop1
+    procedure :: error_stop_2008
 end interface
 
-public :: check, error_stop
 
 contains
 
@@ -80,5 +75,63 @@ subroutine check(condition, msg, code, warn)
     end if
 
 end subroutine check
+
+subroutine error_stop_2008(msg, code)
+    ! Aborts the program with nonzero exit code
+    ! this is a fallback for Fortran 2008 error stop (e.g. Intel 19.1/2020 compiler)
+    !
+    ! The "stop <character>" statement generally has return code 0.
+    ! To allow non-zero return code termination with character message,
+    ! error_stop() uses the statement "error stop", which by default
+    ! has exit code 1 and prints the message to stderr.
+    ! An optional integer return code "code" may be specified.
+    !
+    ! Example
+    ! -------
+    !
+    ! call error_stop("Invalid argument")
+    character(*), intent(in) :: msg
+    integer, intent(in), optional :: code
+    write(stderr,*) msg
+    
+    if(present(code)) then
+      select case (code)
+      case (1)
+        error stop 1
+      case (2)
+        error stop 2
+      case (77)
+        error stop 77
+      case default
+        write(stderr,*) 'ERROR: code ',code,' was specified.'
+        error stop
+      end select
+    else
+      error stop
+    endif
+end subroutine
+
+subroutine error_stop1(msg, code)
+    ! Aborts the program with nonzero exit code
+    !
+    ! The "stop <character>" statement generally has return code 0.
+    ! To allow non-zero return code termination with character message,
+    ! error_stop() uses the statement "error stop", which by default
+    ! has exit code 1 and prints the message to stderr.
+    ! An optional integer return code "code" may be specified.
+    !
+    ! Example
+    ! -------
+    !
+    ! call error_stop("Invalid argument")
+    character(*), intent(in) :: msg
+    integer, intent(in), optional :: code
+    if(present(code)) then
+      write(stderr,*) msg
+      error stop code
+    else
+      error stop msg
+    endif
+end subroutine
 
 end module stdlib_error
