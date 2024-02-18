@@ -6,5 +6,9 @@ program example_is_hermitian
   A = reshape([cmplx(1., 0.), cmplx(3., -1.), cmplx(3., 1.), cmplx(4., 0.)], shape(A))
   B = reshape([cmplx(1., 0.), cmplx(3., 1.), cmplx(3., 1.), cmplx(4., 0.)], shape(B))
   res = is_hermitian(A) ! returns .true.
+  print *, "res = ", res
+  if (.not. res) error stop
   res = is_hermitian(B) ! returns .false.
+  print *, "res = ", res
+  if (res) error stop
 end program example_is_hermitian
