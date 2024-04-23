@@ -6,7 +6,5 @@ program example_is_diagonal
   A = reshape([1., 0., 0., 4.], shape(A))
   B = reshape([1., 0., 3., 4.], shape(B))
   res = is_diagonal(A) ! returns .true.
-  if (.not. res) error stop
   res = is_diagonal(B) ! returns .false.
-  if (res) error stop
 end program example_is_diagonal

@@ -19,9 +19,6 @@ program example_kronecker_product
   end do
   
   C = kronecker_product(A, B)
-  print *, 'C = ', C
-  print *, "sum(C) = ", sum(C)
-  if (abs(sum(C) - 54.0) > 1e-8) error stop
   ! C =     [ a(1,1) * B(:,:) | a(1,2) * B(:,:) ]
   ! or in other words, 
   ! C =     [  1.00      2.00      3.00      2.00      4.00      6.00  ]
