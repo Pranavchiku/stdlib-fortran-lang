@@ -507,6 +507,8 @@ contains
         real(sp) :: re(n,n), im(n,n)
         complex(sp) :: a(n,n), b(n,n)
         complex(sp), parameter :: i_ = cmplx(0,1,kind=sp)
+        complex(sp) :: trace_a_plus_b
+        complex(sp) :: trace_a_plus_trace_b
 
         call random_number(re)
         call random_number(im)
@@ -517,7 +519,9 @@ contains
         b = re + im*i_
 
         ! tr(A + B) = tr(A) + tr(B)
-        call check(error, abs(trace(a+b) - (trace(a) + trace(b))) < sptol, &
+        trace_a_plus_b = trace(a+b)
+        trace_a_plus_trace_b = trace(a) + trace(b)
+        call check(error, abs(trace_a_plus_b - trace_a_plus_trace_b) < sptol, &
             "abs(trace(a+b) - (trace(a) + trace(b))) < sptol failed.")
     end subroutine test_trace_csp
 
