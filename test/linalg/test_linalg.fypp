@@ -277,7 +277,7 @@ contains
         type(error_type), allocatable, intent(out) :: error
 
         integer, parameter :: n = 4
-        integer(int8) :: a(n, n), b(n), c(n), d(n**2), e(n, n), f(n, n)
+        integer(int8) :: a(n, n), b(n), c(n), d(n**2), e1(n), f(n, n), e2(n, n)
         integer :: i
         integer(int8) :: j
         logical :: mask(n, n)
@@ -296,9 +296,10 @@ contains
         call check(error, all(b == c), &
             "all(diag(a) == pack(a,mask))")
         if (allocated(error)) return
-        e = diag(diag(a))
+        e1 = diag(a)
+        e2 = diag(e1)
         f = merge(a,0_int8,mask)
-        call check(error, all(e == f), &
+        call check(error, all(e2 == f), &
             "all(diag(diag(a)) == merge(a,0_int8,mask)) failed.")
     end subroutine test_diag_int8
     subroutine test_diag_int16(error)
@@ -306,7 +307,7 @@ contains
         type(error_type), allocatable, intent(out) :: error
 
         integer, parameter :: n = 4
-        integer(int16) :: a(n, n), b(n), c(n), d(n**2), e(n,n), f(n,n)
+        integer(int16) :: a(n, n), b(n), c(n), d(n**2), e1(n), f(n,n), e2(n, n)
         integer :: i
         integer(int16) :: j
         logical :: mask(n, n)
@@ -325,9 +326,10 @@ contains
         call check(error, all(b == c), &
             "all(diag(a) == pack(a,mask))")
         if (allocated(error)) return
-        e = diag(diag(a))
+        e1 = diag(a)
+        e2 = diag(e1)
         f = merge(a,0_int16,mask)
-        call check(error, all(e == f), &
+        call check(error, all(e2 == f), &
             "all(diag(diag(a)) == merge(a,0_int16,mask)) failed.")
     end subroutine test_diag_int16
     subroutine test_diag_int32(error)
