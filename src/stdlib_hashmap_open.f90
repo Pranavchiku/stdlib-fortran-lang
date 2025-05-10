@@ -13,7 +13,7 @@ submodule(stdlib_hashmaps) stdlib_hashmap_open
         character_storage_size,              &
         error_unit
 
-    use stdlib_hashmap_wrappers
+    !use stdlib_hashmap_wrappers
 
     implicit none
 
