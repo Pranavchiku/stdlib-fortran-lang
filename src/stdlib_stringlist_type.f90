@@ -606,7 +606,12 @@ contains
                 new_stringarray(inew) = list%stringarray(i)
             end do
 
-            call move_alloc( new_stringarray, list%stringarray )
+            if (allocated(list%stringarray)) then
+                deallocate(list%stringarray)
+            end if
+            allocate(list%stringarray(size(new_stringarray)))
+            list%stringarray = new_stringarray
+            deallocate(new_stringarray)
 
         end if
 
