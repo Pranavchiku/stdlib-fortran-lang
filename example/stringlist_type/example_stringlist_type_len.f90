@@ -13,7 +13,7 @@ program example_len
   call stringlist%insert_at(bidx(1), "Element No. two")
 ! stringlist <-- {"Element No. one", "Element No. two"}
 
-  print'(a)', stringlist%len()
+  print *, stringlist%len()
 ! 2
 
 end program example_len
