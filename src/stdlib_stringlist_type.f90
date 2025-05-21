@@ -377,7 +377,7 @@ contains
         character(len=*), dimension(:), intent(in)  :: lhs
         type(stringlist_type), intent(in)           :: rhs
 
-        eq_carray_stringlist = ( rhs == lhs )
+        eq_carray_stringlist = eq_stringlist_carray(rhs, lhs)
 
     end function eq_carray_stringlist
 
@@ -387,7 +387,7 @@ contains
         type(string_type), dimension(:), intent(in) :: lhs
         type(stringlist_type), intent(in)           :: rhs
 
-        eq_sarray_stringlist = ( rhs == lhs )
+        eq_sarray_stringlist = eq_stringlist_sarray(rhs, lhs)
 
     end function eq_sarray_stringlist
 
@@ -399,7 +399,7 @@ contains
         type(stringlist_type), intent(in)           :: lhs
         type(stringlist_type), intent(in)           :: rhs
 
-        ineq_stringlist = .not.( lhs == rhs )
+        ineq_stringlist = .not.(eq_stringlist( lhs, rhs ) )
 
     end function ineq_stringlist
 
@@ -409,7 +409,7 @@ contains
         type(stringlist_type), intent(in)           :: lhs
         character(len=*), dimension(:), intent(in)  :: rhs
 
-        ineq_stringlist_carray = .not.( lhs == rhs ) 
+        ineq_stringlist_carray = .not.( eq_stringlist_carray( lhs, rhs ) )
 
     end function ineq_stringlist_carray
 
@@ -419,7 +419,7 @@ contains
         type(stringlist_type), intent(in)           :: lhs
         type(string_type), dimension(:), intent(in) :: rhs
 
-        ineq_stringlist_sarray = .not.( lhs == rhs ) 
+        ineq_stringlist_sarray = .not.(eq_stringlist_sarray( lhs, rhs ) )
 
     end function ineq_stringlist_sarray
 
@@ -429,7 +429,7 @@ contains
         character(len=*), dimension(:), intent(in)  :: lhs
         type(stringlist_type), intent(in)           :: rhs
 
-        ineq_carray_stringlist = .not.( lhs == rhs)
+        ineq_carray_stringlist = .not.( eq_carray_stringlist( lhs, rhs ) )
 
     end function ineq_carray_stringlist
 
@@ -439,7 +439,7 @@ contains
         type(string_type), dimension(:), intent(in) :: lhs
         type(stringlist_type), intent(in)           :: rhs
 
-        ineq_sarray_stringlist = .not.( lhs == rhs )
+        ineq_sarray_stringlist = .not.(eq_sarray_stringlist( lhs, rhs ) )
 
     end function ineq_sarray_stringlist
 
