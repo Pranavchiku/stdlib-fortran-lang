@@ -362,7 +362,7 @@ contains
         integer(int_index) :: &
             offset
 
-        hash_val = map % hasher( key )
+        hash_val = fnv_1_hasher( key )
 
         if ( map % probe_count > inmap_probe_factor * map % call_count .or. &
              map % num_entries >= load_factor *                             &
@@ -546,7 +546,7 @@ contains
         integer(int_index) :: inmap, offset, test_slot
         character(*), parameter :: procedure = 'MAP_ENTRY'
 
-        hash_val = map % hasher( key )
+        hash_val = fnv_1_hasher( key )
 
         if ( map % probe_count > map_probe_factor * map % call_count .or.   &
              map % num_entries >= load_factor * size( map % slots,          &
@@ -688,7 +688,7 @@ contains
 
         do i=1, map % num_entries + map % num_free
             if ( .not. associated( map % inverse(i) % target ) ) cycle
-            hash_val = map % hasher( map % inverse(i) % target % key )
+            hash_val = fnv_1_hasher( map % inverse(i) % target % key )
             map % inverse(i) % target % hash_val = hash_val
             base_slot = fibonaccI_hash( hash_val, map % nbits )
             offset = 0
