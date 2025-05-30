@@ -132,7 +132,7 @@ contains
                                            test_slot
         integer(4)                  :: bits,      &
                                            stat
-
+        type(open_map_entry_type), pointer :: target_expand_open_slots => null()
         character(256) :: errmsg
         character(*), parameter :: procedure = 'EXPAND_SLOTS'
 
@@ -164,7 +164,8 @@ contains
             map % num_entries + map % num_free
             associate( inverse => map % inverse(inv_index) )
               if ( associated(inverse % target) ) then
-                  base_slot = fibonacci_hash( inverse % target % hash_val, &
+                  target_expand_open_slots => inverse % target
+                  base_slot = fibonacci_hash( target_expand_open_slots % hash_val, &
                                               map % nbits )
                   offset = 0
                   FIND_EMPTY_SLOT: do
@@ -283,6 +284,7 @@ contains
 !
         class(open_hashmap_type), intent(in) :: map
         type(key_type), allocatable, intent(out) :: all_keys(:)
+        type(open_map_entry_type), pointer :: target_get_all_open_keys => null()
         
         integer(4) :: num_keys
         integer(int_index) :: i, key_idx
@@ -295,7 +297,8 @@ contains
             key_idx = 1_int_index
             do i=1_int_index, size( map % inverse, kind=int_index )
                 if ( associated( map % inverse(i) % target ) ) then
-                    all_keys(key_idx) = map % inverse(i) % target % key
+                    target_get_all_open_keys => map % inverse(i) % target
+                    all_keys(key_idx) = target_get_all_open_keys % key
                     key_idx = key_idx + 1_int_index
                 end if
             end do 
@@ -320,6 +323,7 @@ contains
         logical, intent(out), optional          :: exists
 
         integer(int_index) :: inmap
+        type(open_map_entry_type), pointer :: target_get_other_open_data => null()
         character(*), parameter :: procedure = 'GET_OTHER_DATA'
 
         call in_open_map(map, inmap, key)
@@ -334,7 +338,8 @@ contains
             end if
         else if ( associated( map % inverse(inmap) % target ) ) then
             if ( present(exists) ) exists = .true.
-            call copy_other( map % inverse(inmap) % target % other, other )
+            target_get_other_open_data => map % inverse(inmap) % target
+            call copy_other( target_get_other_open_data % other, other )
         else
             if ( present(exists) ) then
                 exists = .false.
@@ -368,6 +373,7 @@ contains
             test_slot
         integer(int_index) :: &
             offset
+        type(open_map_entry_type), pointer :: target_in_open_map => null()
 
         hash_val = fnv_1_hasher( key )
 
@@ -396,8 +402,9 @@ contains
                     map_consist_fault
             else
                 associate( inverse => map % inverse(inmap) )
-                  if ( hash_val == inverse % target % hash_val ) then
-                      if ( key == inverse % target % key ) then
+                  target_in_open_map => inverse % target
+                  if ( hash_val == target_in_open_map % hash_val ) then
+                      if ( key == target_in_open_map % key ) then
                           return
                       end if
                   end if
@@ -698,6 +705,7 @@ contains
         integer(4)       :: base_slot
         integer(4)       :: hash_val
         integer(int_index)      :: i, test_slot, offset
+        type(open_map_entry_type), pointer :: target_rehash_open_map => null()
 
         map % hasher => hasher
 
@@ -705,8 +713,9 @@ contains
 
         do i=1, map % num_entries + map % num_free
             if ( .not. associated( map % inverse(i) % target ) ) cycle
-            hash_val = fnv_1_hasher( map % inverse(i) % target % key )
-            map % inverse(i) % target % hash_val = hash_val
+            target_rehash_open_map => map % inverse(i) % target
+            hash_val = fnv_1_hasher( target_rehash_open_map % key )
+            target_rehash_open_map % hash_val = hash_val
             base_slot = fibonaccI_hash( hash_val, map % nbits )
             offset = 0
             FIND_EMPTY_SLOT: do
@@ -744,6 +753,7 @@ contains
         integer(int_index)                 :: inmap
         logical                            :: overlap
         integer(int_index)                 :: slot_index
+        integer(int_index)                 :: slots_remove_open_entry
 
         overlap = .false.
         call in_open_map( map, inmap, key )
@@ -809,7 +819,8 @@ contains
 
 ! Search forward for entry to fill empty slot
         fill_empty_slots: do
-            bucket => map % inverse(map % slots(current_slot) ) % target
+            slots_remove_open_entry = map % slots(current_slot)
+            bucket => map % inverse(slots_remove_open_entry) % target
             current_index = fibonacci_hash( bucket % hash_val, &
                                             map % nbits )
             if ( overlap .and. empty_slot < base_slot ) then
@@ -891,6 +902,7 @@ contains
 !!     map - an open hash map
         class(open_hashmap_type), intent(in) :: map
         integer(8) :: total_depth
+        type(open_map_entry_type), pointer :: target_total_open_depth => null()
 
         integer(int_index) :: inv_index, slot, slots
         integer(4)  :: index
@@ -902,7 +914,8 @@ contains
             inv_index = map % slots( slot )
             if ( inv_index <= 0 ) cycle
             associate( inverse => map % inverse( inv_index ))
-              index = fibonacci_hash( inverse % target % hash_val, &
+              target_total_open_depth => inverse % target
+              index = fibonacci_hash( target_total_open_depth % hash_val, &
                                       map % nbits )
             end associate
             total_depth = total_depth + &
