@@ -3,6 +3,7 @@
 #:set RANKS = range(1, MAXRANK + 1)
 module stdlib_stats_corr
 
+  use ieee_arithmetic
   use stdlib_error, only: error_stop
   use stdlib_linalg, only: diag
   use stdlib_optval, only: optval
