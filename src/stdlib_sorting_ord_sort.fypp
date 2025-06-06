@@ -65,14 +65,75 @@
 !! of modified versions of the code in the Fortran Standard Library under
 !! the MIT license.
 
-submodule(stdlib_sorting) stdlib_sorting_ord_sort
+module stdlib_sorting_ord_sort
+
+    use stdlib_kinds, only: &
+        int8,               &
+        int16,              &
+        int32,              &
+        int64,              &
+        sp,                 &
+        dp
+
+    use stdlib_optval, only: optval
+
+    use stdlib_string_type, only: string_type, assignment(=), operator(>), &
+        operator(>=), operator(<), operator(<=)
+
+    use stdlib_bitsets, only: bitset_64, bitset_large, &
+        assignment(=), operator(>), operator(>=), operator(<), operator(<=)
 
     implicit none
+    private
+
+    integer, parameter, public :: int_size = int64 !! Integer kind for indexing
+
+! Constants for use by tim_sort
+    integer, parameter :: &
+! The maximum number of entries in a run stack, good for an array of
+! 2**64 elements see
+! https://svn.python.org/projects/python/trunk/Objects/listsort.txt
+        max_merge_stack = int( ceiling( log( 2._dp**64 ) / &
+                               log(1.6180339887_dp) ) )
+
+    type run_type
+!! Version: experimental
+!!
+!! Used to pass state around in a stack among helper functions for the
+!! `ORD_SORT` and `SORT_INDEX` algorithms
+        integer(int_size) :: base = 0
+        integer(int_size) :: len = 0
+    end type run_type
+
+    public ord_sort
+
+    interface ord_sort
+!! Version: experimental
+!!
+!! The generic subroutine interface implementing the `ORD_SORT` algorithm,
+!! a translation to Fortran 2008, of the `"Rust" sort` algorithm found in
+!! `slice.rs`
+!! https://github.com/rust-lang/rust/blob/90eb44a5897c39e3dff9c7e48e3973671dcd9496/src/liballoc/slice.rs#L2159
+!! `ORD_SORT` is a hybrid stable comparison algorithm combining `merge sort`,
+!! and `insertion sort`.
+!! ([Specification](../page/specs/stdlib_sorting.html#ord_sort-sorts-an-input-array))
+!!
+!! It is always at worst O(N Ln(N)) in sorting random
+!! data, having a performance about 25% slower than `SORT` on such
+!! data, but has much better performance than `SORT` on partially
+!! sorted data, having O(N) performance on uniformly non-increasing or
+!! non-decreasing data.
+
+#:for t1, t2, t3, name1 in IRSCB_TYPES_ALT_NAME
+        module procedure ${name1}$_ord_sort
+#:endfor
+
+    end interface ord_sort
 
 contains
 
 #:for t1, t2, t3, name1 in IRSCB_TYPES_ALT_NAME
-    module subroutine ${name1}$_ord_sort( array, work, reverse )
+    subroutine ${name1}$_ord_sort( array, work, reverse )
         ${t1}$, intent(inout)         :: array(0:)
         ${t3}$, intent(out), optional :: work(0:)
         logical, intent(in), optional :: reverse
@@ -437,5 +498,4 @@ contains
 #:endfor
 #:endfor
 
-end submodule stdlib_sorting_ord_sort
-
+end module stdlib_sorting_ord_sort

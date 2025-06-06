@@ -1,5 +1,5 @@
 program example_ord_sort
-  use stdlib_sorting, only: ord_sort
+  use stdlib_sorting_ord_sort, only: ord_sort
   implicit none
   integer, allocatable :: array1(:), work(:)
 
