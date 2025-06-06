@@ -60,15 +60,73 @@
 !! of modified versions of the code in the Fortran Standard Library under
 !! the MIT license.
 
-submodule(stdlib_sorting) stdlib_sorting_sort_index
+module stdlib_sorting_sort_index
+
+    use stdlib_kinds, only: &
+        int8,               &
+        int16,              &
+        int32,              &
+        int64,              &
+        sp,                 &
+        dp
+
+    use stdlib_optval, only: optval
+
+    use stdlib_string_type, only: string_type, assignment(=), operator(>), &
+        operator(>=), operator(<), operator(<=)
+
+    use stdlib_bitsets, only: bitset_64, bitset_large, &
+        assignment(=), operator(>), operator(>=), operator(<), operator(<=)
 
     implicit none
+    private
+
+    integer, parameter, public :: int_size = int64 !! Integer kind for indexing
+
+! Constants for use by tim_sort
+    integer, parameter :: &
+! The maximum number of entries in a run stack, good for an array of
+! 2**64 elements see
+! https://svn.python.org/projects/python/trunk/Objects/listsort.txt
+        max_merge_stack = int( ceiling( log( 2._dp**64 ) / &
+                               log(1.6180339887_dp) ) )
+
+    type run_type
+!! Version: experimental
+!!
+!! Used to pass state around in a stack among helper functions for the
+!! `ORD_SORT` and `SORT_INDEX` algorithms
+        integer(int_size) :: base = 0
+        integer(int_size) :: len = 0
+    end type run_type
+
+    public sort_index
+
+    interface sort_index
+!! Version: experimental
+!!
+!! The generic subroutine interface implementing the `SORT_INDEX` algorithm,
+!! based on the `"Rust" sort` algorithm found in `slice.rs`
+!! https://github.com/rust-lang/rust/blob/90eb44a5897c39e3dff9c7e48e3973671dcd9496/src/liballoc/slice.rs#L2159
+!! but modified to return an array of indices that would provide a stable
+!! sort of the rank one `ARRAY` input.
+!! ([Specification](../page/specs/stdlib_sorting.html#sort_index-creates-an-array-of-sorting-indices-for-an-input-array-while-also-sorting-the-array))
+!!
+!! The indices by default correspond to a
+!! non-decreasing sort, but if the optional argument `REVERSE` is present
+!! with a value of `.TRUE.` the indices correspond to a non-increasing sort.
+
+#:for t1, t2, t3, name1 in IRSCB_TYPES_ALT_NAME
+        module procedure ${name1}$_sort_index
+#:endfor
+
+    end interface sort_index
 
 contains
 
 #:for t1, t2, t3, name1 in IRSCB_TYPES_ALT_NAME
 
-    module subroutine ${name1}$_sort_index( array, index, work, iwork, reverse )
+    subroutine ${name1}$_sort_index( array, index, work, iwork, reverse )
 ! A modification of `${name1}$_ord_sort` to return an array of indices that
 ! would perform a stable sort of the `ARRAY` as input, and also sort `ARRAY`
 ! as desired. The indices by default
@@ -485,4 +543,4 @@ contains
 
 #:endfor
 
-end submodule stdlib_sorting_sort_index
+end module stdlib_sorting_sort_index
