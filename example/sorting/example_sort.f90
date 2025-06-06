@@ -1,5 +1,5 @@
 program example_sort
-  use stdlib_sorting, only: sort
+  use stdlib_sorting_sort, only: sort
   implicit none
   integer, allocatable :: array(:)
 

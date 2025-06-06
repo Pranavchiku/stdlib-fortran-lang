@@ -57,7 +57,7 @@
 !!
 !! as the official source of the algorithm.
 
-submodule(stdlib_sorting) stdlib_sorting_sort
+module stdlib_sorting_sort
 !! This submodule implements the overloaded sorting subroutine `SORT`
 !! that can be used to sort four kinds of `INTEGER` arrays and three kinds
 !! of `REAL` arrays. Sorting is in order of increasing value, with the worst
@@ -71,12 +71,46 @@ submodule(stdlib_sorting) stdlib_sorting_sort
 !! sorted data, sometimes having `merge sort` performance, sometimes having
 !! better than `quicksort` performance.
 
+    use stdlib_kinds, only: &
+        int8,               &
+        int16,              &
+        int32,              &
+        int64,              &
+        sp,                 &
+        dp
+
+    use stdlib_optval, only: optval
+
+    use stdlib_string_type, only: string_type, assignment(=), operator(>), &
+        operator(>=), operator(<), operator(<=)
+
+    use stdlib_bitsets, only: bitset_64, bitset_large, &
+        assignment(=), operator(>), operator(>=), operator(<), operator(<=)
+
     implicit none
+    private
+
+    integer, parameter, public :: int_size = int64 !! Integer kind for indexing
+
+    public sort
+
+    interface sort
+!! Version: experimental
+!!
+!! The generic subroutine interface implementing the `SORT` algorithm, based
+!! on the `introsort` of David Musser.
+!! ([Specification](../page/specs/stdlib_sorting.html#sort-sorts-an-input-array))
+
+#:for t1, t2, name1 in IRSCB_TYPES_ALT_NAME
+        pure module procedure ${name1}$_sort
+#:endfor
+
+    end interface sort
 
 contains
 
 #:for t1, t2, name1 in IRSCB_TYPES_ALT_NAME
-    pure module subroutine ${name1}$_sort( array, reverse )
+    pure subroutine ${name1}$_sort( array, reverse )
             ${t1}$, intent(inout) :: array(0:)
             logical, intent(in), optional            :: reverse
 
@@ -259,4 +293,4 @@ contains
 #:endfor
 #:endfor
 
-end submodule stdlib_sorting_sort
+end module stdlib_sorting_sort
