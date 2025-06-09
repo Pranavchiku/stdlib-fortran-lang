@@ -1,6 +1,6 @@
 program example_radix_sort
     use iso_fortran_env, only: int8, int16, dp => real64
-    use stdlib_sorting, only: radix_sort
+    use stdlib_sorting_radix_sort, only: radix_sort
     implicit none
     integer(int8), allocatable :: arri8(:)
     integer(int16), allocatable :: arri16(:)
