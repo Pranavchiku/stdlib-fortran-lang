@@ -26,10 +26,10 @@ set(fppFiles
     stdlib_linalg_cross_product.fypp
     stdlib_optval.fypp
     stdlib_selection.fypp
-    # stdlib_sorting.fypp
-    # stdlib_sorting_ord_sort.fypp
-    # stdlib_sorting_sort.fypp
-    # stdlib_sorting_sort_index.fypp
+    stdlib_sorting.fypp
+    stdlib_sorting_ord_sort.fypp
+    stdlib_sorting_sort.fypp
+    stdlib_sorting_sort_index.fypp
     stdlib_specialfunctions_gamma.fypp
     # stdlib_stats.fypp
     stdlib_stats_corr.fypp
@@ -76,7 +76,7 @@ set(SRC
     # stdlib_hashmap_chaining.f90
     # stdlib_hashmap_open.f90
     stdlib_logger.f90
-    # stdlib_sorting_radix_sort.f90
+    stdlib_sorting_radix_sort.f90
     stdlib_system.F90
     stdlib_specialfunctions.f90
     stdlib_specialfunctions_legendre.f90
