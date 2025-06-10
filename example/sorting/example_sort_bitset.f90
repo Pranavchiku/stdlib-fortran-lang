@@ -1,6 +1,6 @@
 program example_sort_bitset
   use stdlib_kinds, only: int32
-  use stdlib_sorting, only: sort
+  use stdlib_sorting_sort, only: sort
   use stdlib_bitsets, only: bitset_large
   implicit none
   type(bitset_large), allocatable :: array(:)
