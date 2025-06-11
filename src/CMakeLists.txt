@@ -71,10 +71,10 @@ set(SRC
     stdlib_ansi_to_string.f90
     stdlib_array.f90
     stdlib_error.f90
-    # stdlib_hashmap_wrappers.f90
-    # stdlib_hashmaps.f90
-    # stdlib_hashmap_chaining.f90
-    # stdlib_hashmap_open.f90
+    stdlib_hashmap_wrappers.f90
+    stdlib_hashmaps.f90
+    stdlib_hashmap_chaining.f90
+    stdlib_hashmap_open.f90
     stdlib_logger.f90
     stdlib_sorting_radix_sort.f90
     stdlib_system.F90
