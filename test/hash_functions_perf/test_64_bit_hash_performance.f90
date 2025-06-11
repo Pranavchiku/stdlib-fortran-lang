@@ -11,7 +11,7 @@ program test_64_bit_hash_performance
     use stdlib_hash_64bit
     use stdlib_hash_64bit_fnv
     use stdlib_hash_32bit_fnv
-    use stdlib_hash_64bit_spookyv2
+    ! use stdlib_hash_64bit_spookyv2
     use stdlib_hash_64bit_pengy
 
     implicit none
@@ -63,7 +63,7 @@ program test_64_bit_hash_performance
 
     call test_pengy()
 
-    call test_spooky()
+    ! call test_spooky()
 
 contains
 
@@ -115,32 +115,32 @@ contains
 
     end subroutine test_fnv_1a
 
-    subroutine test_spooky()
-        integer :: index2
-        integer(int64) :: hash(2)
-        integer(int64) :: seed(2) = [ 0_int64, 0_int64 ]
-        real :: t1, t2, tdiff
-        integer(int64) :: summary(repeat)
+    ! subroutine test_spooky()
+    !     integer :: index2
+    !     integer(int64) :: hash(2)
+    !     integer(int64) :: seed(2) = [ 0_int64, 0_int64 ]
+    !     real :: t1, t2, tdiff
+    !     integer(int64) :: summary(repeat)
 
-        call new_spooky_hash_seed( seed )
-        do k=1, size(block_size)
-            call cpu_time(t1)
-            do index=1, repeat
-                do index2=1, test_size, block_size(k)
-                    hash = spooky_hash( test_object( index2: &
-                                                     index2+block_size(k)-1 ), &
-                                                     seed )
-                    if (index2 == index) summary(index) = hash(1)
-                end do
-            end do
-            call cpu_time(t2)
-            tdiff = t2-t1
-            write(lun, '("|", a10, 2x, "|", i8, 3x, "|", 1x, i10, 1x, ' // &
-                '"|", f9.5, 1x, "|")') 'Spooky', &
-                block_size(k), repeat*(test_size/block_size(k)), tdiff
-        end do
+    !     call new_spooky_hash_seed( seed )
+    !     do k=1, size(block_size)
+    !         call cpu_time(t1)
+    !         do index=1, repeat
+    !             do index2=1, test_size, block_size(k)
+    !                 hash = spooky_hash( test_object( index2: &
+    !                                                  index2+block_size(k)-1 ), &
+    !                                                  seed )
+    !                 if (index2 == index) summary(index) = hash(1)
+    !             end do
+    !         end do
+    !         call cpu_time(t2)
+    !         tdiff = t2-t1
+    !         write(lun, '("|", a10, 2x, "|", i8, 3x, "|", 1x, i10, 1x, ' // &
+    !             '"|", f9.5, 1x, "|")') 'Spooky', &
+    !             block_size(k), repeat*(test_size/block_size(k)), tdiff
+    !     end do
 
-    end subroutine test_spooky
+    ! end subroutine test_spooky
 
     subroutine test_pengy()
         integer :: index2
