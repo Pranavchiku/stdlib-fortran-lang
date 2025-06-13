@@ -84,8 +84,7 @@ module stdlib_stringlist_type
                                                                 insert_before_chararray_int,    &
                                                                 insert_before_stringarray_int
 
-        procedure         :: get_string_idx         => get_string_idx_wrap
-        generic, public   :: get                    => get_string_idx
+        procedure         :: get                            => get_string_idx_wrap
 
     end type stringlist_type
 
