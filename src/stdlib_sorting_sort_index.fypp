@@ -157,7 +157,8 @@ contains
         integer(int_size), intent(out), optional :: iwork(0:)
         logical, intent(in), optional            :: reverse
 
-        integer(int_size) :: array_size, i, stat
+        integer(int_size) :: array_size, i
+        integer(int32) :: stat
         ${t2}$, allocatable :: buf(:)
         integer(int_size), allocatable :: ibuf(:)
 
