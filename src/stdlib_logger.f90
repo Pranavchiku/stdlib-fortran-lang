@@ -565,188 +565,167 @@ contains
         integer :: count, indent_len, index_, length, remain
         integer, parameter :: new_len = len(new_line('a'))
 
+        integer :: new_len_buffer
+        character(:), allocatable :: dummy
+
         length = len_trim(string)
         allocate( character(2*length) :: buffer )
         len_buffer = 0
         indent_len = len(col_indent)
-        call format_first_line()
+
+        ! call format_first_line()
+        if ( self % max_width == 0 .or.                     &
+            ( length <= self % max_width .and.              &
+            index( string(1:length), new_line('a')) == 0 ) ) then
+            buffer(1:length) = string(1:length)
+            len_buffer = length
+            remain = 0
+            return
+        else
+            index_ = index( string(1:min(length, self % max_width)), &
+                            new_line('a') )
+            if ( index_ == 0 ) then
+                do index_=self % max_width, 1, -1
+                    if ( string(index_:index_) == ' ' ) exit
+                end do
+            end if
+
+            if ( index_ == 0 ) then
+                buffer(1:self % max_width) = &
+                    string(1:self % max_width)
+                len_buffer = self % max_width
+                count = self % max_width
+                remain = length - count
+                return
+            else
+                buffer(1:index_-1) = string(1:index_-1)
+                len_buffer = index_-1
+                count = index_
+                remain = length - count
+                return
+            end if
+
+        end if
 
         if ( self % indent_lines ) then
             do while( remain > 0 )
-                call indent_format_subsequent_line()
+                if ( index( string(count+1:length), new_line('a')) == 0 .and. &
+                    remain <= self % max_width - indent_len ) then
+                    new_len_buffer = len_buffer + length &
+                        - count + new_len + indent_len
+                    if ( new_len_buffer > len( buffer ) ) then
+                        allocate( character( 2*len( buffer ) ) :: dummy )
+                        dummy = buffer
+                        call move_alloc( dummy, buffer )
+                    end if
+                    buffer( len_buffer+1:new_len_buffer ) = &
+                        new_line('a') // col_indent // string(count+1:length)
+                    len_buffer = new_len_buffer
+                    count = length
+                    remain = 0
+                    return
+                else
+
+                    index_ = count + index( string(count+1:                   &
+                        min ( length, count+self % max_width - indent_len) ), &
+                        new_line('a'))
+                    if(index_ == count) then
+                        do index_=count+self % max_width-indent_len, count+1, -1
+                            if ( string(index_:index_) == ' ' ) exit
+                        end do
+                    end if
+
+                    if ( index_ == count ) then
+                        new_len_buffer = len_buffer + self % max_width &
+                            + new_len 
+                        if ( new_len_buffer > len( buffer ) ) then
+                            allocate( character( 2*len( buffer ) ) :: dummy )
+                            dummy = buffer
+                            call move_alloc( dummy, buffer )
+                        end if
+                        buffer( len_buffer+1: new_len_buffer ) = &
+                            new_line('a') // col_indent // &
+                            string(count+1:count+self % max_width-indent_len)
+                        len_buffer = new_len_buffer
+                        count = count + self % max_width - indent_len
+                        remain = length - count
+                        return
+                    else
+                        new_len_buffer = len_buffer + index_ - count - 1 &
+                            + new_len + indent_len
+                        if ( new_len_buffer > len( buffer ) ) then
+                            allocate( character( 2*len( buffer ) ) :: dummy )
+                            dummy = buffer
+                            call move_alloc( dummy, buffer )
+                        end if
+                        buffer( len_buffer+1: new_len_buffer ) = &
+                            new_line('a') // col_indent // string(count+1:index_-1)
+                        len_buffer = new_len_buffer
+                        count = index_
+                        remain = length - count
+                        return
+                    end if
+
+                end if
             end do
         else
             do while( remain > 0 )
-                call format_subsequent_line()
+                if ( remain <= self % max_width ) then
+                    new_len_buffer = len_buffer + length - count + new_len
+                    if ( new_len_buffer > len( buffer ) ) then
+                        allocate( character( 2*len( buffer ) ) :: dummy )
+                        dummy = buffer
+                        call move_alloc( dummy, buffer )
+                    end if
+                    buffer( len_buffer+1:new_len_buffer ) = &
+                        new_line('a') // string(count+1:length)
+                    len_buffer = new_len_buffer
+                    count = length
+                    remain = 0
+                    return
+                else
+
+                    index_ = count + index(string(count+1:count+self % max_width),&
+                        new_line('a'))
+                    if(index_ == count) then
+                        do index_=count+self % max_width, count+1, -1
+                            if ( string(index_:index_) == ' ' ) exit
+                        end do
+                    end if
+
+                    if ( index_ == count ) then
+                        new_len_buffer = len_buffer + self % max_width + &
+                            new_len
+                        if ( new_len_buffer > len( buffer ) ) then
+                            allocate( character( 2*len( buffer ) ) :: dummy )
+                            dummy = buffer
+                            call move_alloc( dummy, buffer )
+                        end if
+                        buffer( len_buffer+1:new_len_buffer ) = &
+                            new_line('a') // string(count+1:count+self % max_width)
+                        len_buffer = new_len_buffer
+                        count = count + self % max_width
+                        remain = length - count
+                        return
+                    else
+                        new_len_buffer = len_buffer + index_ - 1 &
+                            - count + new_len
+                        if ( new_len_buffer > len( buffer ) ) then
+                            allocate( character( 2*len( buffer ) ) :: dummy )
+                            dummy = buffer
+                            call move_alloc( dummy, buffer )
+                        end if
+                        buffer( len_buffer+1:new_len_buffer ) = &
+                            new_line('a') // string(count+1:index_-1)
+                        len_buffer = new_len_buffer
+                        count = index_
+                        remain = length - count
+                        return
+                    end if
+
+                end if
             end do
         end if
-
-    contains
-
-        subroutine format_first_line()
-
-            if ( self % max_width == 0 .or.                     &
-                ( length <= self % max_width .and.              &
-                index( string(1:length), new_line('a')) == 0 ) ) then
-                buffer(1:length) = string(1:length)
-                len_buffer = length
-                remain = 0
-                return
-            else
-
-                index_ = index( string(1:min(length, self % max_width)), &
-                                new_line('a') )
-                if ( index_ == 0 ) then
-                    do index_=self % max_width, 1, -1
-                        if ( string(index_:index_) == ' ' ) exit
-                    end do
-                end if
-
-                if ( index_ == 0 ) then
-                    buffer(1:self % max_width) = &
-                        string(1:self % max_width)
-                    len_buffer = self % max_width
-                    count = self % max_width
-                    remain = length - count
-                    return
-                else
-                    buffer(1:index_-1) = string(1:index_-1)
-                    len_buffer = index_-1
-                    count = index_
-                    remain = length - count
-                    return
-                end if
-
-            end if
-
-        end subroutine format_first_line
-
-        subroutine format_subsequent_line()
-            integer :: new_len_buffer
-            character(:), allocatable :: dummy
-
-            if ( remain <= self % max_width ) then
-                new_len_buffer = len_buffer + length - count + new_len
-                if ( new_len_buffer > len( buffer ) ) then
-                    allocate( character( 2*len( buffer ) ) :: dummy )
-                    dummy = buffer
-                    call move_alloc( dummy, buffer )
-                end if
-                buffer( len_buffer+1:new_len_buffer ) = &
-                    new_line('a') // string(count+1:length)
-                len_buffer = new_len_buffer
-                count = length
-                remain = 0
-                return
-            else
-
-                index_ = count + index(string(count+1:count+self % max_width),&
-                    new_line('a'))
-                if(index_ == count) then
-                    do index_=count+self % max_width, count+1, -1
-                        if ( string(index_:index_) == ' ' ) exit
-                    end do
-                end if
-
-                if ( index_ == count ) then
-                    new_len_buffer = len_buffer + self % max_width + &
-                        new_len
-                    if ( new_len_buffer > len( buffer ) ) then
-                        allocate( character( 2*len( buffer ) ) :: dummy )
-                        dummy = buffer
-                        call move_alloc( dummy, buffer )
-                    end if
-                    buffer( len_buffer+1:new_len_buffer ) = &
-                        new_line('a') // string(count+1:count+self % max_width)
-                    len_buffer = new_len_buffer
-                    count = count + self % max_width
-                    remain = length - count
-                    return
-                else
-                    new_len_buffer = len_buffer + index_ - 1 &
-                        - count + new_len
-                    if ( new_len_buffer > len( buffer ) ) then
-                        allocate( character( 2*len( buffer ) ) :: dummy )
-                        dummy = buffer
-                        call move_alloc( dummy, buffer )
-                    end if
-                    buffer( len_buffer+1:new_len_buffer ) = &
-                        new_line('a') // string(count+1:index_-1)
-                    len_buffer = new_len_buffer
-                    count = index_
-                    remain = length - count
-                    return
-                end if
-
-            end if
-
-        end subroutine format_subsequent_line
-
-        subroutine indent_format_subsequent_line()
-            integer :: new_len_buffer
-            character(:), allocatable :: dummy
-
-            if ( index( string(count+1:length), new_line('a')) == 0 .and. &
-                remain <= self % max_width - indent_len ) then
-                new_len_buffer = len_buffer + length &
-                    - count + new_len + indent_len
-                if ( new_len_buffer > len( buffer ) ) then
-                    allocate( character( 2*len( buffer ) ) :: dummy )
-                    dummy = buffer
-                    call move_alloc( dummy, buffer )
-                end if
-                buffer( len_buffer+1:new_len_buffer ) = &
-                    new_line('a') // col_indent // string(count+1:length)
-                len_buffer = new_len_buffer
-                count = length
-                remain = 0
-                return
-            else
-
-                index_ = count + index( string(count+1:                   &
-                    min ( length, count+self % max_width - indent_len) ), &
-                    new_line('a'))
-                if(index_ == count) then
-                    do index_=count+self % max_width-indent_len, count+1, -1
-                        if ( string(index_:index_) == ' ' ) exit
-                    end do
-                end if
-
-                if ( index_ == count ) then
-                    new_len_buffer = len_buffer + self % max_width &
-                        + new_len 
-                    if ( new_len_buffer > len( buffer ) ) then
-                        allocate( character( 2*len( buffer ) ) :: dummy )
-                        dummy = buffer
-                        call move_alloc( dummy, buffer )
-                    end if
-                    buffer( len_buffer+1: new_len_buffer ) = &
-                        new_line('a') // col_indent // &
-                        string(count+1:count+self % max_width-indent_len)
-                    len_buffer = new_len_buffer
-                    count = count + self % max_width - indent_len
-                    remain = length - count
-                    return
-                else
-                    new_len_buffer = len_buffer + index_ - count - 1 &
-                        + new_len + indent_len
-                    if ( new_len_buffer > len( buffer ) ) then
-                        allocate( character( 2*len( buffer ) ) :: dummy )
-                        dummy = buffer
-                        call move_alloc( dummy, buffer )
-                    end if
-                    buffer( len_buffer+1: new_len_buffer ) = &
-                        new_line('a') // col_indent // string(count+1:index_-1)
-                    len_buffer = new_len_buffer
-                    count = index_
-                    remain = length - count
-                    return
-                end if
-
-            end if
-
-        end subroutine indent_format_subsequent_line
-
     end subroutine format_output_string
 
 
