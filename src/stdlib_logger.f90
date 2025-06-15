@@ -1255,6 +1255,9 @@ contains
         character(*), parameter       :: procedure_name = 'LOG_TEXT_ERROR'
         character(len=:), allocatable :: buffer
 
+        integer                   :: i
+        character(:), allocatable :: location, marker
+
         if ( self % level > text_error_level ) return
 
         acaret = optval(caret, '^')
@@ -1272,7 +1275,81 @@ contains
             end if
         end if
 
-        call write_log_text_error_buffer( )
+        ! call write_log_text_error_buffer( )
+        if ( present(filename) ) then
+            if ( present(line_number) ) then
+                allocate( character(len_trim(filename)+15) :: location )
+                write( location, fmt='(a, ":", i0, ":", i0)', err=999, &
+                        iomsg=iomsg, iostat=iostat )           &
+                        trim(filename) , line_number, column
+            else
+                allocate( character(len_trim(filename)+45) :: location )
+                write( location, fmt='(a, i0)', err=999, iomsg=iomsg, &
+                        iostat=iostat ) &
+                        "Error found in file: '" // trim(filename) // &
+                        "', at column: ", column
+            end if
+
+        else
+            if ( present(line_number) ) then
+                allocate( character(54) :: location )
+                write( location, fmt='(a, i0, a, i0)', err=999, &
+                        iomsg=iomsg, iostat=iostat ) &
+                    'Error found at line number: ', line_number, &
+                    ', and column: ', column
+            else
+                allocate( character(36) :: location )
+                write( location, &
+                        fmt='("Error found in line at column:", i0)' ) &
+                    column
+            end if
+        end if
+
+        allocate( character(column) :: marker )
+        do i=1, column-1
+            marker(i:i) = ' '
+        end do
+        marker(column:column) = acaret
+        if ( self % add_blank_line ) then
+            if ( self % time_stamp ) then
+                buffer = new_line('a') // time_stamp() // &
+                    new_line('a') // trim(location) // &
+                    new_line('a') // new_line('a') // trim(line) // &
+                    new_line('a') // marker // &
+                    new_line('a') // 'Error: ' // trim(summary)
+            else
+                buffer = new_line('a') // trim(location) // &
+                    new_line('a') // new_line('a') // trim(line) // &
+                    new_line('a') // marker // &
+                    new_line('a') // 'Error: ' // trim(summary)
+            end if
+        else
+            if ( self % time_stamp ) then
+                buffer = time_stamp() // &
+                    new_line('a') // trim(location) // &
+                    new_line('a') // new_line('a') // trim(line) // &
+                    new_line('a') // marker // &
+                    new_line('a') // 'Error: ' // trim(summary)
+            else
+                buffer = trim(location) // &
+                    new_line('a') // new_line('a') // trim(line) // &
+                    new_line('a') // marker // &
+                    new_line('a') // 'Error: ' // trim(summary)
+            end if
+        end if
+
+        if ( present(stat) ) stat = success
+
+        return
+
+999         if ( present( stat ) ) then
+            stat = write_failure
+            return
+        else
+            call handle_write_failure( -999, procedure_name, iostat, &
+                                        iomsg )
+        end if
+
         if ( self % units == 0 ) then
             write( output_unit, '(a)' ) buffer
         else
@@ -1280,88 +1357,6 @@ contains
                 write( self % log_units(lun), '(a)' ) buffer
             end do
         end if
-
-    contains
-
-        subroutine write_log_text_error_buffer( )
-            integer                   :: i
-            character(:), allocatable :: location, marker
-
-            if ( present(filename) ) then
-                if ( present(line_number) ) then
-                    allocate( character(len_trim(filename)+15) :: location )
-                    write( location, fmt='(a, ":", i0, ":", i0)', err=999, &
-                           iomsg=iomsg, iostat=iostat )           &
-                           trim(filename) , line_number, column
-                else
-                    allocate( character(len_trim(filename)+45) :: location )
-                    write( location, fmt='(a, i0)', err=999, iomsg=iomsg, &
-                           iostat=iostat ) &
-                           "Error found in file: '" // trim(filename) // &
-                           "', at column: ", column
-                end if
-
-            else
-                if ( present(line_number) ) then
-                    allocate( character(54) :: location )
-                    write( location, fmt='(a, i0, a, i0)', err=999, &
-                           iomsg=iomsg, iostat=iostat ) &
-                        'Error found at line number: ', line_number, &
-                        ', and column: ', column
-                else
-                    allocate( character(36) :: location )
-                    write( location, &
-                           fmt='("Error found in line at column:", i0)' ) &
-                        column
-                end if
-            end if
-
-            allocate( character(column) :: marker )
-            do i=1, column-1
-                marker(i:i) = ' '
-            end do
-            marker(column:column) = acaret
-            if ( self % add_blank_line ) then
-                if ( self % time_stamp ) then
-                    buffer = new_line('a') // time_stamp() // &
-                        new_line('a') // trim(location) // &
-                        new_line('a') // new_line('a') // trim(line) // &
-                        new_line('a') // marker // &
-                        new_line('a') // 'Error: ' // trim(summary)
-                else
-                    buffer = new_line('a') // trim(location) // &
-                        new_line('a') // new_line('a') // trim(line) // &
-                        new_line('a') // marker // &
-                        new_line('a') // 'Error: ' // trim(summary)
-                end if
-            else
-                if ( self % time_stamp ) then
-                    buffer = time_stamp() // &
-                        new_line('a') // trim(location) // &
-                        new_line('a') // new_line('a') // trim(line) // &
-                        new_line('a') // marker // &
-                        new_line('a') // 'Error: ' // trim(summary)
-                else
-                    buffer = trim(location) // &
-                        new_line('a') // new_line('a') // trim(line) // &
-                        new_line('a') // marker // &
-                        new_line('a') // 'Error: ' // trim(summary)
-                end if
-            end if
-
-            if ( present(stat) ) stat = success
-
-            return
-
-999         if ( present( stat ) ) then
-                stat = write_failure
-                return
-            else
-                call handle_write_failure( -999, procedure_name, iostat, &
-                                           iomsg )
-            end if
-
-        end subroutine write_log_text_error_buffer
 
     end subroutine log_text_error
 
