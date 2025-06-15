@@ -221,6 +221,11 @@ contains
               position=aposition, status=astatus, iostat=iostat, iomsg=iomsg, &
               err=999 )
 
+        if ( iostat /= 0 ) then
+            stat = open_failure
+            return
+        end if
+
         if ( allocated( self % log_units ) ) then
             if ( size(self % log_units) == self % units ) then
                 allocate( dummy(2*self % units) )
