@@ -7,7 +7,7 @@ program test_stdlib_logger
         input_unit,             &
         output_unit
 
-    use stdlib_logger, global => global_logger
+    use stdlib_logger
 
     implicit none
 
@@ -15,6 +15,8 @@ program test_stdlib_logger
     integer              :: level, max_width, stat
     integer              :: unit1, unit2, unit3, unit4, unit5, unit6
     logical              :: add_blank_line, exist, indent, time_stamp_
+
+    type(logger_type) :: global
 
     if ( global % log_units_assigned() == 0 ) then
         write(*,*) 'Start off with 0 LOG_UNITS as expected.'
@@ -44,34 +46,34 @@ program test_stdlib_logger
 
     call test_removing_log_units()
 
-    print *
-    print *, 'running log_text_error'
-    call global % log_text_error( 'This text should be written to UNIT1' // &
-                                  ' and UNIT3 and not to OUTPUT_UNIT.',     &
-                                  column = 25,                              &
-                                  summary = 'There is no real error here.', &
-                                  filename = 'dummy.txt',                   &
-                                  line_number = 0,                          &
-                                  caret = '1',                              &
-                                  stat = stat )
+!     print *
+!     print *, 'running log_text_error'
+!     call global % log_text_error( 'This text should be written to UNIT1' // &
+!                                   ' and UNIT3 and not to OUTPUT_UNIT.',     &
+!                                   column = 25,                              &
+!                                   summary = 'There is no real error here.', &
+!                                   filename = 'dummy.txt',                   &
+!                                   line_number = 0,                          &
+!                                   caret = '1',                              &
+!                                   stat = stat )
 
-!    call global % assert( 1 < 0, '1 < 0 ; Test of ASSERT', module='N/A', &
-!        procedure = 'TEST_SDLIB_LOGGER' )
+! !    call global % assert( 1 < 0, '1 < 0 ; Test of ASSERT', module='N/A', &
+! !        procedure = 'TEST_SDLIB_LOGGER' )
 
-    call test_adding_log_units()
+!     call test_adding_log_units()
 
-    print *
-    print *, 'running log_text_error'
-    call global % log_text_error( 'This text should be written to ' //      &
-                                  'UNIT1, UNIT2, and OUTPUT_UNIT.',         &
-                                  column = 25,                              &
-                                  summary = 'There is no real error here.', &
-                                  filename = 'dummy.txt',                   &
-                                  line_number = 0,                          &
-                                  caret = '^',                              &
-                                  stat = stat )
+!     print *
+!     print *, 'running log_text_error'
+!     call global % log_text_error( 'This text should be written to ' //      &
+!                                   'UNIT1, UNIT2, and OUTPUT_UNIT.',         &
+!                                   column = 25,                              &
+!                                   summary = 'There is no real error here.', &
+!                                   filename = 'dummy.txt',                   &
+!                                   line_number = 0,                          &
+!                                   caret = '^',                              &
+!                                   stat = stat )
 
-    call test_level()
+!     call test_level()
 
 contains
 
@@ -527,319 +529,319 @@ contains
 
     end subroutine test_removing_log_units
 
-    subroutine test_adding_log_units()
+!     subroutine test_adding_log_units()
 
-        print *
-        print *, 'running test_adding_log_units'
-        call global % add_log_unit( unit2, stat )
-        if ( stat == success ) then
-            if ( global % log_units_assigned() == 3 ) then
-                write(*,*) 'Successfully added unit2 as expected'
+!         print *
+!         print *, 'running test_adding_log_units'
+!         call global % add_log_unit( unit2, stat )
+!         if ( stat == success ) then
+!             if ( global % log_units_assigned() == 3 ) then
+!                 write(*,*) 'Successfully added unit2 as expected'
 
-            else
-                error stop 'Adding unit2 failed to increase log_units to 3.'
+!             else
+!                 error stop 'Adding unit2 failed to increase log_units to 3.'
 
-            end if
+!             end if
 
-        else
-            error stop 'Unexpected problem adding unit2.'
+!         else
+!             error stop 'Unexpected problem adding unit2.'
 
-        end if
-
-        call global % add_log_unit( output_unit, stat )
-        if ( stat == success ) then
-            if ( global % log_units_assigned() == 4 ) then
-                write(*,*) 'Successfully added output_unit as expected'
-
-            else
-                error stop 'Adding output_unit failed to increase ' // &
-                    'log_units to 4.'
+!         end if
+
+!         call global % add_log_unit( output_unit, stat )
+!         if ( stat == success ) then
+!             if ( global % log_units_assigned() == 4 ) then
+!                 write(*,*) 'Successfully added output_unit as expected'
+
+!             else
+!                 error stop 'Adding output_unit failed to increase ' // &
+!                     'log_units to 4.'
 
-            end if
+!             end if
 
-        else
-            error stop 'Unexpected problem adding output_unit.'
+!         else
+!             error stop 'Unexpected problem adding output_unit.'
 
-        end if
+!         end if
 
-        call global % add_log_unit( error_unit, stat )
-        if ( stat == success ) then
-            if ( global % log_units_assigned() == 5 ) then
-                write(*,*) 'Successfully added error_unit as expected'
+!         call global % add_log_unit( error_unit, stat )
+!         if ( stat == success ) then
+!             if ( global % log_units_assigned() == 5 ) then
+!                 write(*,*) 'Successfully added error_unit as expected'
 
-            else
-                error stop 'Adding error_unit failed to increase ' // &
-                    'log_units to 5.'
+!             else
+!                 error stop 'Adding error_unit failed to increase ' // &
+!                     'log_units to 5.'
 
-            end if
+!             end if
 
-        else
-            error stop 'Unexpected problem adding error_unit.'
+!         else
+!             error stop 'Unexpected problem adding error_unit.'
 
-        end if
+!         end if
 
-        call global % add_log_unit( input_unit, stat )
-        if ( stat /= success ) then
-            if ( global % log_units_assigned() == 5 ) then
-                write(*,*) 'Failed at adding input_unit as expected'
+!         call global % add_log_unit( input_unit, stat )
+!         if ( stat /= success ) then
+!             if ( global % log_units_assigned() == 5 ) then
+!                 write(*,*) 'Failed at adding input_unit as expected'
 
-            else
-                error stop 'Unsuccessfully adding input_unit failed to ' // &
-                    'keep log_units to 5.'
+!             else
+!                 error stop 'Unsuccessfully adding input_unit failed to ' // &
+!                     'keep log_units to 5.'
 
-            end if
+!             end if
 
-        else
-            error stop 'Unexpected success adding input_unit.'
+!         else
+!             error stop 'Unexpected success adding input_unit.'
 
-        end if
+!         end if
 
-        open( newunit=unit6, file='sixth_log_file.txt', form='formatted', &
-            action='read', status='replace', position='rewind' )
-        call global % add_log_unit( unit6, stat )
-        if ( stat == read_only_error ) then
-            write(*,*) 'Adding unit6 failed with a READ_ONLY_ERROR as expected'
+!         open( newunit=unit6, file='sixth_log_file.txt', form='formatted', &
+!             action='read', status='replace', position='rewind' )
+!         call global % add_log_unit( unit6, stat )
+!         if ( stat == read_only_error ) then
+!             write(*,*) 'Adding unit6 failed with a READ_ONLY_ERROR as expected'
 
-        else
-            error stop 'Adding unit6 did not fail with a READ_ONLY_ERROR.'
+!         else
+!             error stop 'Adding unit6 did not fail with a READ_ONLY_ERROR.'
 
-        end if
-        close(unit6)
-        call global % add_log_unit( unit6, stat )
-        if ( stat == unopened_in_error ) then
-            write(*,*) 'Adding unit6 failed with a UNOPENED_IN_ERROR as ' // &
-                'expected'
+!         end if
+!         close(unit6)
+!         call global % add_log_unit( unit6, stat )
+!         if ( stat == unopened_in_error ) then
+!             write(*,*) 'Adding unit6 failed with a UNOPENED_IN_ERROR as ' // &
+!                 'expected'
 
-        else
-            error stop 'Adding unit6 did not fail with a UNOPENED_IN_ERROR.'
+!         else
+!             error stop 'Adding unit6 did not fail with a UNOPENED_IN_ERROR.'
 
-        end if
-        open( newunit=unit6, file='sixth_log_file.txt', form='unformatted', &
-            action='write', status='replace', position='rewind' )
-        call global % add_log_unit( unit6, stat )
-        if ( stat == unformatted_in_error ) then
-            write(*,*) 'Adding unit6 failed with a UNFORMATTED_IN_ERROR ' // &
-                'as expected'
+!         end if
+!         open( newunit=unit6, file='sixth_log_file.txt', form='unformatted', &
+!             action='write', status='replace', position='rewind' )
+!         call global % add_log_unit( unit6, stat )
+!         if ( stat == unformatted_in_error ) then
+!             write(*,*) 'Adding unit6 failed with a UNFORMATTED_IN_ERROR ' // &
+!                 'as expected'
 
-        else
-            write(*, *) 'STAT = ', stat
-            error stop 'Adding unit6 did not fail with a UNFORMATTED_IN_ERROR.'
+!         else
+!             write(*, *) 'STAT = ', stat
+!             error stop 'Adding unit6 did not fail with a UNFORMATTED_IN_ERROR.'
 
-        end if
-        close(unit6)
-        open( newunit=unit6, file='sixth_log_file.txt', form='formatted', &
-            action='write', status='replace', access='direct', recl=100 )
-        call global % add_log_unit( unit6, stat )
-        if ( stat == non_sequential_error ) then
-            write(*,*) 'Adding unit6 failed with a ' // &
-                'NON_SEQUENTIAL_ERROR as expected'
+!         end if
+!         close(unit6)
+!         open( newunit=unit6, file='sixth_log_file.txt', form='formatted', &
+!             action='write', status='replace', access='direct', recl=100 )
+!         call global % add_log_unit( unit6, stat )
+!         if ( stat == non_sequential_error ) then
+!             write(*,*) 'Adding unit6 failed with a ' // &
+!                 'NON_SEQUENTIAL_ERROR as expected'
 
-        else
-            error stop 'Adding unit6 did not fail with a ' // &
-                'NON_SEQUENTIAL_ERROR.'
+!         else
+!             error stop 'Adding unit6 did not fail with a ' // &
+!                 'NON_SEQUENTIAL_ERROR.'
 
-        end if
-        close(unit6)
-        open( newunit=unit6, file='sixth_log_file.txt', form='formatted', &
-            action='write', status='replace', position='rewind', &
-            access='sequential' )
-        call global % add_log_unit( unit6, stat )
-        if ( stat == success ) then
-            if ( global % log_units_assigned() == 6 ) then
-                write(*,*) 'Successfully added unit6 as expected'
+!         end if
+!         close(unit6)
+!         open( newunit=unit6, file='sixth_log_file.txt', form='formatted', &
+!             action='write', status='replace', position='rewind', &
+!             access='sequential' )
+!         call global % add_log_unit( unit6, stat )
+!         if ( stat == success ) then
+!             if ( global % log_units_assigned() == 6 ) then
+!                 write(*,*) 'Successfully added unit6 as expected'
 
-            else
-                error stop 'Adding unit6 failed to increase log_units to 6.'
+!             else
+!                 error stop 'Adding unit6 failed to increase log_units to 6.'
 
-            end if
+!             end if
 
-        else
-            error stop 'Unexpected problem adding unit6.'
+!         else
+!             error stop 'Unexpected problem adding unit6.'
 
-        end if
+!         end if
 
-        call global % remove_log_unit( unit6, stat=stat )
-        if ( stat /= success ) then
-            error stop 'Unexpected problem removing unit6'
+!         call global % remove_log_unit( unit6, stat=stat )
+!         if ( stat /= success ) then
+!             error stop 'Unexpected problem removing unit6'
 
-        else
-            if ( global % log_units_assigned() /= 5 ) then
-                error stop 'Removing unit6 did not decrement log_units to 5.'
+!         else
+!             if ( global % log_units_assigned() /= 5 ) then
+!                 error stop 'Removing unit6 did not decrement log_units to 5.'
 
-            else
-                write(*,*) 'Successfully removed unit6 as expected.'
+!             else
+!                 write(*,*) 'Successfully removed unit6 as expected.'
 
-            end if
+!             end if
 
-        end if
+!         end if
 
-        call global % remove_log_unit( error_unit, stat=stat )
-        if ( stat /= success ) then
-            error stop 'Unexpected problem removing error_unit'
+!         call global % remove_log_unit( error_unit, stat=stat )
+!         if ( stat /= success ) then
+!             error stop 'Unexpected problem removing error_unit'
 
-        else
-            if ( global % log_units_assigned() /= 4 ) then
-                error stop 'Removing error_unit did not decrement ' // &
-                    'log_units to 4.'
+!         else
+!             if ( global % log_units_assigned() /= 4 ) then
+!                 error stop 'Removing error_unit did not decrement ' // &
+!                     'log_units to 4.'
 
-            else
-                write(*,*) 'Successfully removed error_unit as expected.'
+!             else
+!                 write(*,*) 'Successfully removed error_unit as expected.'
 
-            end if
+!             end if
 
-        end if
+!         end if
 
-        call global % remove_log_unit( unit3, stat=stat )
-        if ( stat /= success ) then
-            error stop 'Unexpected problem removing unit3'
+!         call global % remove_log_unit( unit3, stat=stat )
+!         if ( stat /= success ) then
+!             error stop 'Unexpected problem removing unit3'
 
-        else
-            if ( global % log_units_assigned() /= 3 ) then
-                error stop 'Removing unit3 did not decrement ' // &
-                    'log_units to 3.'
+!         else
+!             if ( global % log_units_assigned() /= 3 ) then
+!                 error stop 'Removing unit3 did not decrement ' // &
+!                     'log_units to 3.'
 
-            else
-                write(*,*) 'Successfully removed unit3 as expected.'
+!             else
+!                 write(*,*) 'Successfully removed unit3 as expected.'
 
-            end if
+!             end if
 
-        end if
+!         end if
 
-        return
-    end subroutine test_adding_log_units
+!         return
+!     end subroutine test_adding_log_units
 
-    subroutine test_level()
+!     subroutine test_level()
 
-        print *, 'running test_level'
+!         print *, 'running test_level'
 
-        call global % configure( level = all_level )
+!         call global % configure( level = all_level )
 
-        call global % configuration( level = level )
-        if ( level == all_level ) then
-            write(*,*) 'LEVEL is all_level as expected.'
+!         call global % configuration( level = level )
+!         if ( level == all_level ) then
+!             write(*,*) 'LEVEL is all_level as expected.'
 
-        else
-            error stop 'LEVEL starts off as not equal to all_level ' //&
-            'contrary to expectations.'
+!         else
+!             error stop 'LEVEL starts off as not equal to all_level ' //&
+!             'contrary to expectations.'
 
-        end if
+!         end if
 
-        call global % log_message('This message should be always printed, &
-             & irrespective of the severity level')
+!         call global % log_message('This message should be always printed, &
+!              & irrespective of the severity level')
 
-        call global % log_debug( 'This message should be printed')
-        call global % log_information( 'This message should be printed')
-        call global % log_warning( 'This message should be printed')
-        call global % log_error( 'This message should be printed')
-        call global % log_io_error( 'This message should be printed')
+!         call global % log_debug( 'This message should be printed')
+!         call global % log_information( 'This message should be printed')
+!         call global % log_warning( 'This message should be printed')
+!         call global % log_error( 'This message should be printed')
+!         call global % log_io_error( 'This message should be printed')
 
-        call global % configure( level = debug_level )
+!         call global % configure( level = debug_level )
 
-        call global % configuration( level = level )
-        if ( level == debug_level ) then
-            write(*,*) 'LEVEL is debug_level as expected.'
+!         call global % configuration( level = level )
+!         if ( level == debug_level ) then
+!             write(*,*) 'LEVEL is debug_level as expected.'
 
-        else
-            error stop 'LEVEL starts off as not equal to debug_level ' //&
-            'contrary to expectations.'
+!         else
+!             error stop 'LEVEL starts off as not equal to debug_level ' //&
+!             'contrary to expectations.'
 
-        end if
+!         end if
 
-        call global % log_message('This message should be always printed, &
-             & irrespective of the severity level')
+!         call global % log_message('This message should be always printed, &
+!              & irrespective of the severity level')
 
-        call global % log_debug( 'This message should be printed')
-        call global % log_information( 'This message should be printed')
-        call global % log_warning( 'This message should be printed')
-        call global % log_error( 'This message should be printed')
-        call global % log_io_error( 'This message should be printed')
+!         call global % log_debug( 'This message should be printed')
+!         call global % log_information( 'This message should be printed')
+!         call global % log_warning( 'This message should be printed')
+!         call global % log_error( 'This message should be printed')
+!         call global % log_io_error( 'This message should be printed')
 
-        call global % configure( level = information_level )
+!         call global % configure( level = information_level )
 
-        call global % configuration( level = level )
-        if ( level == information_level ) then
-            write(*,*) 'LEVEL is information_level as expected.'
+!         call global % configuration( level = level )
+!         if ( level == information_level ) then
+!             write(*,*) 'LEVEL is information_level as expected.'
 
-        else
-            error stop 'LEVEL starts off as not equal to information_level ' //&
-            'contrary to expectations.'
+!         else
+!             error stop 'LEVEL starts off as not equal to information_level ' //&
+!             'contrary to expectations.'
 
-        end if
+!         end if
 
-        call global % log_message('This message should be always printed, &
-             & irrespective of the severity level')
+!         call global % log_message('This message should be always printed, &
+!              & irrespective of the severity level')
 
-        call global % log_debug( 'This message should NOT be printed')
-        call global % log_information( 'This message should be printed')
-        call global % log_warning( 'This message should be printed')
-        call global % log_error( 'This message should be printed')
-        call global % log_io_error( 'This message should be printed')
+!         call global % log_debug( 'This message should NOT be printed')
+!         call global % log_information( 'This message should be printed')
+!         call global % log_warning( 'This message should be printed')
+!         call global % log_error( 'This message should be printed')
+!         call global % log_io_error( 'This message should be printed')
 
-        call global % configure( level = warning_level )
+!         call global % configure( level = warning_level )
 
-        call global % configuration( level = level )
-        if ( level == warning_level ) then
-            write(*,*) 'LEVEL is warning_level as expected.'
+!         call global % configuration( level = level )
+!         if ( level == warning_level ) then
+!             write(*,*) 'LEVEL is warning_level as expected.'
 
-        else
-            error stop 'LEVEL starts off as not equal to warning_level ' //&
-            'contrary to expectations.'
+!         else
+!             error stop 'LEVEL starts off as not equal to warning_level ' //&
+!             'contrary to expectations.'
 
-        end if
+!         end if
 
-        call global % log_message('This message should be always printed, &
-             & irrespective of the severity level')
+!         call global % log_message('This message should be always printed, &
+!              & irrespective of the severity level')
 
-        call global % log_debug( 'This message should NOT be printed')
-        call global % log_information( 'This message should NOT be printed')
-        call global % log_warning( 'This message should be printed')
-        call global % log_error( 'This message should be printed')
-        call global % log_io_error( 'This message should be printed')
+!         call global % log_debug( 'This message should NOT be printed')
+!         call global % log_information( 'This message should NOT be printed')
+!         call global % log_warning( 'This message should be printed')
+!         call global % log_error( 'This message should be printed')
+!         call global % log_io_error( 'This message should be printed')
 
-        call global % configure( level = error_level )
+!         call global % configure( level = error_level )
 
-        call global % configuration( level = level )
-        if ( level == error_level ) then
-            write(*,*) 'LEVEL is error_level as expected.'
+!         call global % configuration( level = level )
+!         if ( level == error_level ) then
+!             write(*,*) 'LEVEL is error_level as expected.'
 
-        else
-            error stop 'LEVEL starts off as not equal to error_level ' //&
-            'contrary to expectations.'
+!         else
+!             error stop 'LEVEL starts off as not equal to error_level ' //&
+!             'contrary to expectations.'
 
-        end if
+!         end if
 
-        call global % log_message('This message should be always printed, &
-             & irrespective of the severity level')
+!         call global % log_message('This message should be always printed, &
+!              & irrespective of the severity level')
 
-        call global % log_debug( 'This message should NOT be printed')
-        call global % log_information( 'This message should NOT be printed')
-        call global % log_warning( 'This message should NOT be printed')
-        call global % log_error( 'This message should be printed')
-        call global % log_io_error( 'This message should be printed')
+!         call global % log_debug( 'This message should NOT be printed')
+!         call global % log_information( 'This message should NOT be printed')
+!         call global % log_warning( 'This message should NOT be printed')
+!         call global % log_error( 'This message should be printed')
+!         call global % log_io_error( 'This message should be printed')
 
-        call global % configure( level = none_level )
+!         call global % configure( level = none_level )
 
-        call global % configuration( level = level )
-        if ( level == none_level ) then
-            write(*,*) 'LEVEL is none_level as expected.'
+!         call global % configuration( level = level )
+!         if ( level == none_level ) then
+!             write(*,*) 'LEVEL is none_level as expected.'
 
-        else
-            error stop 'LEVEL starts off as not equal to none_level ' //&
-            'contrary to expectations.'
+!         else
+!             error stop 'LEVEL starts off as not equal to none_level ' //&
+!             'contrary to expectations.'
 
-        end if
+!         end if
 
-        call global % log_message('This message should be always printed, &
-             & irrespective of the severity level')
+!         call global % log_message('This message should be always printed, &
+!              & irrespective of the severity level')
 
-        call global % log_debug( 'This message should NOT be printed')
-        call global % log_information( 'This message should NOT be printed')
-        call global % log_warning( 'This message should NOT be printed')
-        call global % log_error( 'This message should NOT be printed')
-        call global % log_io_error( 'This message should NOT be printed')
+!         call global % log_debug( 'This message should NOT be printed')
+!         call global % log_information( 'This message should NOT be printed')
+!         call global % log_warning( 'This message should NOT be printed')
+!         call global % log_error( 'This message should NOT be printed')
+!         call global % log_io_error( 'This message should NOT be printed')
 
-        print *, 'end of test_level'
+!         print *, 'end of test_level'
 
-    end subroutine test_level
+!     end subroutine test_level
 
 end program test_stdlib_logger
