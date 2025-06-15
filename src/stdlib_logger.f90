@@ -1502,19 +1502,13 @@ contains
         character(128) :: errmsg
         integer :: lun, lun_old
         character(*), parameter :: procedure_name = 'REMOVE_LOG_UNIT'
-        logical :: unit_exist
-
-        unit_exist = .false.
 
         if ( present(stat) ) stat = success
         do lun=1, self % units
-            if ( unit == self % log_units(lun) ) then
-                unit_exist = .true.
-                exit
-            end if
+            if ( unit == self % log_units(lun) ) exit
         end do
 
-        if ( unit_exist == .false. ) return
+        if ( lun == self % units + 1 ) return
 
         if ( present(close_unit) ) then
             if ( close_unit ) close( unit, err=999, iomsg=errmsg )
