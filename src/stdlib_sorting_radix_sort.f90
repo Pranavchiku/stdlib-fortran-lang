@@ -1,4 +1,15 @@
-submodule(stdlib_sorting) stdlib_sorting_radix_sort
+module stdlib_sorting_radix_sort
+
+    use stdlib_kinds, only: &
+        int8,               &
+        int16,              &
+        int32,              &
+        int64,              &
+        sp,                 &
+        dp 
+    
+    use stdlib_optval, only: optval
+
     implicit none
 
     integer, parameter :: radix_bits = 8
@@ -9,6 +20,21 @@ submodule(stdlib_sorting) stdlib_sorting_radix_sort
     integer(kind=int32), parameter :: radix_mask_i32 = 255_int32
     integer(kind=int64), parameter :: radix_bits_i64 = 8_int64
     integer(kind=int64), parameter :: radix_mask_i64 = 255_int64
+
+    private
+
+    integer, parameter, public :: int_size = int64 !! Integer kind for indexing
+
+    public radix_sort
+
+    interface radix_sort
+        module procedure int8_radix_sort
+        module procedure int16_radix_sort
+        module procedure int32_radix_sort
+        module procedure int64_radix_sort
+        module procedure sp_radix_sort
+        module procedure dp_radix_sort
+    end interface radix_sort
 
 contains
 ! For int8, radix sort becomes counting sort, so buffer is not needed
@@ -463,4 +489,4 @@ contains
             deallocate (buffer)
         end if
     end subroutine dp_radix_sort
-end submodule stdlib_sorting_radix_sort
+end module stdlib_sorting_radix_sort
