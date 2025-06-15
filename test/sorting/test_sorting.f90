@@ -96,12 +96,12 @@ contains
             new_unittest('real_radix_sorts', test_real_radix_sorts), &
             new_unittest('int_sorts', test_int_sorts), &
             ! new_unittest('char_sorts', test_char_sorts), &
-            new_unittest('string_sorts', test_string_sorts) &
+            new_unittest('string_sorts', test_string_sorts), &
             ! new_unittest('bitset_large_sorts', test_bitsetl_sorts), &
             ! new_unittest('bitset_64_sorts', test_bitset64_sorts), &
-            ! new_unittest('int_sort_indexes', test_int_sort_indexes), &
+            new_unittest('int_sort_indexes', test_int_sort_indexes), &
             ! new_unittest('char_sort_indexes', test_char_sort_indexes), &
-            ! new_unittest('string_sort_indexes', test_string_sort_indexes), &
+            new_unittest('string_sort_indexes', test_string_sort_indexes) &
             ! new_unittest('bitset_large_sort_indexes', test_bitsetl_sort_indexes), &
             ! new_unittest('bitset_64_sort_indexes', test_bitset64_sort_indexes) &
         ]
@@ -1369,59 +1369,59 @@ contains
 
     ! end subroutine test_char_sort_index
 
-    ! subroutine test_string_sort_indexes(error)
-    !     !> Error handling
-    !     type(error_type), allocatable, intent(out) :: error
-    !     logical :: ltest
+    subroutine test_string_sort_indexes(error)
+        !> Error handling
+        type(error_type), allocatable, intent(out) :: error
+        logical :: ltest
 
-    !     call test_string_sort_index( string_decrease, "String Decrease", ltest )
-    !     call check(error, ltest)
-    !     if (allocated(error)) return
+        call test_string_sort_index( string_decrease, "String Decrease", ltest )
+        call check(error, ltest)
+        if (allocated(error)) return
 
-    !     call test_string_sort_index( string_increase, "String Increase", ltest )
-    !     call check(error, ltest)
-    !     if (allocated(error)) return
+        call test_string_sort_index( string_increase, "String Increase", ltest )
+        call check(error, ltest)
+        if (allocated(error)) return
 
-    !     call test_string_sort_index( string_rand, "String Random", ltest )
-    !     call check(error, ltest)
+        call test_string_sort_index( string_rand, "String Random", ltest )
+        call check(error, ltest)
 
-    ! end subroutine test_string_sort_indexes
+    end subroutine test_string_sort_indexes
 
-    ! subroutine test_string_sort_index( a, a_name, ltest )
-    !     type(string_type), intent(in) :: a(0:)
-    !     character(*), intent(in) :: a_name
-    !     logical, intent(out) :: ltest
+    subroutine test_string_sort_index( a, a_name, ltest )
+        type(string_type), intent(in) :: a(0:)
+        character(*), intent(in) :: a_name
+        logical, intent(out) :: ltest
 
-    !     integer(int64) :: t0, t1, tdiff
-    !     real(dp)       :: rate
-    !     integer(int64) :: i
-    !     logical        :: valid
+        integer(int64) :: t0, t1, tdiff
+        real(dp)       :: rate
+        integer(int64) :: i
+        logical        :: valid
 
-    !     ltest = .true.
+        ltest = .true.
 
-    !     tdiff = 0
-    !     do i = 1, repeat
-    !         string_dummy = a
-    !         call system_clock( t0, rate )
-    !         call sort_index( string_dummy, index, string_work, iwork )
-    !         call system_clock( t1, rate )
-    !         tdiff = tdiff + t1 - t0
-    !     end do
-    !     tdiff = tdiff/repeat
+        tdiff = 0
+        do i = 1, repeat
+            string_dummy = a
+            call system_clock( t0, rate )
+            call sort_index( string_dummy, index, string_work, iwork )
+            call system_clock( t1, rate )
+            tdiff = tdiff + t1 - t0
+        end do
+        tdiff = tdiff/repeat
 
-    !     call verify_string_sort( string_dummy, valid, i )
-    !     ltest = (ltest .and. valid)
-    !     if ( .not. valid ) then
-    !         write( *, * ) "SORT_INDEX did not sort " // a_name // "."
-    !         write(*,*) 'i = ', i
-    !         write(*,'(a17, 2(1x,a4))') 'string_dummy(i-1:i) = ', &
-    !             string_dummy(i-1:i)
-    !     end if
-    !     write( lun, '("|  String_type |", 1x, i7, 2x, "|", 1x, a15, " |", ' // &
-    !         'a12, " |",  F10.6, " |" )' ) &
-    !         string_size, a_name, "Sort_Index", tdiff/rate
+        call verify_string_sort( string_dummy, valid, i )
+        ltest = (ltest .and. valid)
+        if ( .not. valid ) then
+            write( *, * ) "SORT_INDEX did not sort " // a_name // "."
+            write(*,*) 'i = ', i
+            write(*,'(a17, 2(1x,a4))') 'string_dummy(i-1:i) = ', &
+                string_dummy(i-1:i)
+        end if
+        write( lun, '("|  String_type |", 1x, i7, 2x, "|", 1x, a15, " |", ' // &
+            'a12, " |",  F10.6, " |" )' ) &
+            string_size, a_name, "Sort_Index", tdiff/rate
 
-    ! end subroutine test_string_sort_index
+    end subroutine test_string_sort_index
 
     ! subroutine test_bitsetl_sort_indexes(error)
     !     !> Error handling
