@@ -194,9 +194,9 @@ contains
         integer        :: lun
         integer        :: i
 
-        aaction = trim(optval(action, 'write'))
-        aposition = trim(optval(position, 'rewind'))
-        astatus = trim(optval(status, 'replace'))
+        aaction = optval(action, 'write')
+        aposition = optval(position, 'rewind')
+        astatus = optval(status, 'replace')
 
         if ( len_trim(aaction) == 4 ) then
 
