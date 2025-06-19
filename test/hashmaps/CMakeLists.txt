@@ -7,7 +7,7 @@ set(fppFiles
 
 fypp_f90("${fyppFlags}" "${fppFiles}" outFiles)
 
-# ADDTEST(chaining_maps)
+ADDTEST(chaining_maps)
 ADDTEST(open_maps)
 # ADDTEST(maps)
 
