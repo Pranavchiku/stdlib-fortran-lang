@@ -21,9 +21,7 @@ contains
     !> Lower bound of array to index
     integer, intent(in), optional :: lbound
     !> Locations of true elements
-    integer, allocatable :: loc(:)
-
-    allocate(loc(count(array)))
+    integer :: loc(count(array))
 
     call logicalloc(loc, array, .true., lbound)
   end function trueloc
@@ -38,9 +36,7 @@ contains
     !> Lower bound of array to index
     integer, intent(in), optional :: lbound
     !> Locations of false elements
-    integer, allocatable :: loc(:)
-
-    allocate(loc(count(.not.array)))
+    integer :: loc(count(.not.array))
 
     call logicalloc(loc, array, .false., lbound)
   end function falseloc
