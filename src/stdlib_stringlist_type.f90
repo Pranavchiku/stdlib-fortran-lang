@@ -530,7 +530,7 @@ contains
         type(stringlist_index_type), intent(in)     :: idx
         type(string_type), intent(in)               :: string
 
-        call list%insert_before( list%to_future_at_idxn( idx ), string )
+        call list%insert_before_string_int( list%to_future_at_idxn( idx ), string )
 
     end subroutine insert_at_string_idx_wrap
 
@@ -543,7 +543,7 @@ contains
         type(stringlist_index_type), intent(in)     :: idx
         type(stringlist_type), intent(in)           :: slist
 
-        call list%insert_before( list%to_future_at_idxn( idx ), slist )
+        call list%insert_before_stringlist_int( list%to_future_at_idxn( idx ), slist )
 
     end subroutine insert_at_stringlist_idx_wrap
 
@@ -556,7 +556,7 @@ contains
         type(stringlist_index_type), intent(in)     :: idx
         character(len=*), dimension(:), intent(in)  :: carray
 
-        call list%insert_before( list%to_future_at_idxn( idx ), carray )
+        call list%insert_before_chararray_int( list%to_future_at_idxn( idx ), carray )
 
     end subroutine insert_at_chararray_idx_wrap
 
@@ -569,7 +569,7 @@ contains
         type(stringlist_index_type), intent(in)     :: idx
         type(string_type), dimension(:), intent(in) :: sarray
 
-        call list%insert_before( list%to_future_at_idxn( idx ), sarray )
+        call list%insert_before_stringarray_int( list%to_future_at_idxn( idx ), sarray )
 
     end subroutine insert_at_stringarray_idx_wrap
 
