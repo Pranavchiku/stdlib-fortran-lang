@@ -610,7 +610,7 @@ contains
         integer(int64) :: byte_val
         integer :: i, j, k
         integer(int64) :: buf(sc_numvars)
-
+        integer(int64) :: arr_new_length(1)
         integer(int8)  :: dummy(0:7)
         integer(int64) :: h(0:11)
         integer(int64)  :: bend,       &
@@ -627,7 +627,8 @@ contains
             remainder = spooky % remainder
             spooky % data( remainder:remainder+length-1 ) = key
             spooky % length = length + spooky % length
-            dummy = transfer( new_length, 0_int8, 8 )
+            arr_new_length = [new_Length]
+            dummy = transfer( arr_new_length, 0_int8, 8 )
             if ( little_endian ) then
                 spooky % remainder = transfer( [ dummy(0), 0_int8 ], 0_int16 )
             else
@@ -721,6 +722,7 @@ contains
 
         integer(int64) :: h(0:11)
         integer(int64) :: index, remainder
+        integer(int64) :: arr_remainder(1)
         integer(int8)  :: dummy(2)
         integer(int64) :: buf(2 * sc_numvars)
         integer(int64) :: byte_val
@@ -766,7 +768,8 @@ contains
 
     ! mix in the last partial block, and the length mod sc_blocksize
         spooky % data(sc_blocksize+remainder:) = 0_int8
-        dummy = transfer( remainder, 0_int8, 2 )
+        arr_remainder = [remainder]
+        dummy = transfer( arr_remainder, 0_int8, 2 )
 
         if  ( little_endian ) then
             spooky % data(sc_blocksize-1) = dummy(1)
