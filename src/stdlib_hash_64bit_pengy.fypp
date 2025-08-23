@@ -53,6 +53,8 @@ module stdlib_hash_64bit_pengy
 
     implicit none
 
+    private
+
     integer, parameter, public :: &
         int_hash     = int64
 !! The number of bits in the output hash
