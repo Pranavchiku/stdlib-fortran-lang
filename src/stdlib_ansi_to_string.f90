@@ -4,7 +4,7 @@
 submodule (stdlib_ansi) stdlib_ansi_to_string
     implicit none
 
-    character, parameter :: esc = achar(27), chars(0:9) = &
+    character, parameter :: esc = achar(27), chars(1:10) = &
         ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 contains
