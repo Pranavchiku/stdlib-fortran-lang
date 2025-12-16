@@ -474,6 +474,7 @@ contains
             if ( self % units .gt. 0 ) then
                 log_units = self % log_units(1:self % units)
             else
+                if ( allocated(log_units) ) deallocate(log_units)
                 allocate(log_units(0))
             end if
         end if
